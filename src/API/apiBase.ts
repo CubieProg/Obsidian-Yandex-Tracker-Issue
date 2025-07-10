@@ -62,7 +62,7 @@ export class API {
                 <td> ${this.convertSummary(json_resp['summary'])} </td>
                 <td> ${json_resp['statusStartTime'].split('T')[0]} </td>
                 <td> ${this.convertName(json_resp['assignee']['display'])} </td>
-                <td style="background: green"> ${json_resp['status']['display']} </td>
+                <td> ${json_resp['status']['display']} </td>
             </tr>`
         } catch {
             return ""
