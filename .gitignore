@@ -25,6 +25,7 @@ data1.json
 manifest.json
 not a main.js
 trash/
+src/python test
 
 
 # Exclude macOS Finder (System Explorer) View States
