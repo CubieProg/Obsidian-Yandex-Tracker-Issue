@@ -1,0 +1,42 @@
+body {
+    --cell-size: 50px;
+}
+
+.board {
+    margin: 20px 0px 20px 0px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.square {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(var(--cell-size) * 0.85);
+    font-family: serif;
+}
+
+.white {
+    background-color: color(srgb 0.944 0.944 0.944);
+}
+
+.black {
+    background-color: color(srgb 0.81333 0.81333 0.81333);
+}
+
+.red-hihglight {
+    box-shadow: 0 0 calc(var(--cell-size)*2) rgba(255, 0, 0, 0.75) inset;
+}
+
+.blue-hihglight {
+    box-shadow: 0 0 calc(var(--cell-size)*2) rgba(0, 0, 255, 0.4) inset;
+}
+
+.green-hihglight {
+    box-shadow: 0 0 calc(var(--cell-size)*2) rgba(0, 255, 0, 0.5) inset;
+}
