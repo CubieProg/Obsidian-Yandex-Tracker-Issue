@@ -7,4 +7,5 @@ export class IssueType implements IUtilType {
     readonly key: string
     readonly display: string
 
+    public readonly mainField: string = "display"
 }

@@ -20,4 +20,6 @@ export class Queue {
     readonly workflows: IssueType[] // ???
     readonly denyVoting: boolean
     readonly issueTypesConfig: any[] // ConfigItem[]?
+
+    public readonly mainField: string = "name"
 }

@@ -15,6 +15,10 @@ export interface TestableRequestProvider {
     testConnection(): Promise<void>
 }
 
+export interface YandexTrackerAPIProvider {
+    getBoard: Promise<any>;
+}
+
 export class YTClient implements TestableRequestProvider {
 
     private yTAPI
@@ -29,25 +33,52 @@ export class YTClient implements TestableRequestProvider {
         return new Board()
     }
 
-    public async getIssue(issueID: string): Promise<Issue>  {
+    public async getIssue(issueID: string, deep: boolean = true): Promise<Issue> {
         const issue = await this.yTAPI.requestIssue(issueID)
+        const result: Issue = issue as Issue
+
+        if (deep) {
+            const updatedByPromise = result.updatedBy && result.updatedBy.id ? this.getUser(result.updatedBy.id.toString()) : result.updatedBy
+            const followersPromise = result.followers ? result.followers.filter(value => value.id).map(value => this.getUser(value.id.toString())) : result.followers
+            const createdByPromise = result.createdBy && result.createdBy.id ? this.getUser(result.createdBy.id.toString()) : result.createdBy
+            const assigneePromise = result.assignee && result.assignee.id ? this.getUser(result.assignee.id.toString()) : result.assignee
+            // const projectPromise = this.getProject(result.project.id.toString())
+            const queuePromise = result.queue && result.queue.id ? this.getQueue(result.queue.id) : result.queue
+            const parentPromise = result.parent && result.parent.id ? this.getIssue(result.parent.id, false) : result.parent
+            // const sprintPromise = this.getSprint(result.sprint.id.toString())
+
+            result.updatedBy = await updatedByPromise
+            result.followers = followersPromise ? await Promise.all(followersPromise) : result.followers
+            result.createdBy = await createdByPromise
+            result.assignee = await assigneePromise
+            // result.project = await projectPromise
+            result.queue = await queuePromise
+            result.parent = await parentPromise
+            // result.sprint = await sprintPromise
+        } else {
+            result.updatedBy = undefined
+            result.followers = undefined
+            result.createdBy = undefined
+            result.assignee = undefined
+            result.project = undefined
+            result.queue = undefined
+            result.parent = undefined
+            result.sprint = undefined
+        }
 
 
-        console.log(issue)
-        // const assigneePromise = this.yTAPI.requestIssue(issue.assignee.id)
-
-        // let result = new Issue(issue)
-        // result.addAssignee(await assigneePromise)
-
+        return result
         return new Issue()
     }
 
-    public async getQueue(queueID: string): Promise<Queue>  {
+    public async getQueue(queueID: string): Promise<Queue> {
         return new Queue()
     }
 
-    public async getUser(userID: string): Promise<User>  {
-        return new User()
+    public async getUser(userID: string): Promise<User> {
+        const user = await this.yTAPI.requestUser(userID)
+
+        return user as User
     }
 
     public async getTest() {

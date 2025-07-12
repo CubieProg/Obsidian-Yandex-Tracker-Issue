@@ -1,22 +1,26 @@
 
 
 export class User {
-    private self: string
-    private uid: number
-    private login: string
-    private trackerUid: number
-    private passportUid: number
-    private cloudUid: string
-    private firstName: string
-    private lastName: string
-    private display: string
-    private email: string
-    private external: boolean
-    private hasLicense: boolean
-    private dismissed: boolean
-    private useNewFilters: boolean
-    private disableNotifications: boolean
-    private firstLoginDate: string
-    private lastLoginDate: string
-    private welcomeMailSent: boolean
+    public self: string
+    public id: string
+    public uid: number
+    public login: string
+    public trackerUid: number
+    public passportUid: number
+    public cloudUid: string
+    public firstName: string
+    public lastName: string
+    public display: string
+    public email: string
+    public external: boolean
+    public hasLicense: boolean
+    public dismissed: boolean
+    public useNewFilters: boolean
+    public disableNotifications: boolean
+    public firstLoginDate: string
+    public lastLoginDate: string
+    public welcomeMailSent: boolean
+
+    
+    public readonly mainField: string = "display"
 }

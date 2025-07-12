@@ -8,4 +8,5 @@ export class Priority implements IUtilType {
     readonly key: string
     readonly display: string
 
+    public readonly mainField: string = "display"
 }
