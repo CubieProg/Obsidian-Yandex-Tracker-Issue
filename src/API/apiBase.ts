@@ -14,6 +14,7 @@ export const isFailResponse = (x: FailResponse | any): x is FailResponse => (x a
 export class API {
 
     private retries: number = 10;
+    private delayMultiplier: number = 150;
 
     constructor() { }
 
@@ -34,7 +35,7 @@ export class API {
         }).catch(
             async (err) => {
                 console.error(err)
-                await delay((retries + 1) * 100)
+                await delay((retries + 1) * this.delayMultiplier)
                 return await this.request(URL, headers, skipRetry, retries + 1)
             }
         )

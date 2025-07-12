@@ -3,12 +3,14 @@ import { YTISettings } from './src/Settings/Settings';
 import { YTISettingsTab } from './src/Settings/SettingsTab';
 import { API } from './src/API/APIBase';
 import { YTClient } from './src/YTClient';
+import { MarkdownParser } from './src/MarkdownParser/MarkdownParser';
 
 class YTIPlugin extends Plugin {
 
     private settings: YTISettings;
     private api: API;
     private YandexTrackerClient: YTClient
+    private markdownParser: MarkdownParser
 
     async onload() {
         this.settings = new YTISettings(this)
@@ -18,9 +20,12 @@ class YTIPlugin extends Plugin {
 
         this.addSettingTab(new YTISettingsTab(this, this.settings, this.YandexTrackerClient))
 
-        this.registerMarkdownCodeBlockProcessor('yt-test', async (source, el, ctx) => {
-            this.YandexTrackerClient.testReq()
-        })
+        this.markdownParser = new MarkdownParser(this.YandexTrackerClient, this)
+
+
+        // this.registerMarkdownCodeBlockProcessor('yt-test', async (source, el, ctx) => {
+        //     this.YandexTrackerClient.testReq()
+        // })
 
         // this.api = new API(this.settings.data)
 

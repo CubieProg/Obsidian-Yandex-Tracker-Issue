@@ -1,21 +1,111 @@
 import { Plugin } from 'obsidian';
+import { YTClient } from '../YTClient';
+import { Issue } from '../Model/Issue';
+import { text } from 'stream/consumers';
 
 export class MarkdownParser {
 
-    constructor() {
+    private yTClient: YTClient;
+    private plugin: Plugin;
+
+    constructor(yTClient: YTClient, plugin: Plugin) {
+        this.yTClient = yTClient
+        this.plugin = plugin
+
+        this.registerProcessors()
+    }
+
+    private registerProcessors() {
+        this.plugin.registerMarkdownCodeBlockProcessor('yt-issue', async (source, el, ctx) => {
+            this.issueProcessor(source, el, ctx)
+        })
+
 
     }
 
-    public registerProcessors(plugin: Plugin) {
+    private async issueProcessor(source, el: HTMLElement, ctx) {
 
-    }
+        console.log("Issue Processing")
 
-    private async boardProcessor(source, el, ctx) {
+        const content_lines: string[] = source.split('\n');
+        const issues_tasks: Promise<Issue>[] = content_lines.map((line: string) => this.yTClient.getIssue(line))
+
+        const table = createEl('table')
+
+        const caption = createEl('caption', { attr: { text: "test caption" }, parent: table })
+        caption.innerHTML = "ISSUES"
+        table.appendChild(caption)
         
-    }
+        const head = createEl('thead', { parent: table })
+        const head_line = createEl('tr', { parent: head })
+        head.appendChild(head_line)
+        table.appendChild(head)
 
-    private async issueProcessor(source, el, ctx) {
+        const body = createEl('tbody', { parent: table })
+        table.appendChild(body)
 
+
+        Issue.table_columns.forEach((item: string) => {
+            const column = createEl('th', { attr: { text: item }, parent: head_line })
+            column.innerHTML = item
+            head_line.appendChild(column)
+        })
+
+
+        // for (let task of issues_tasks) {
+        //     const issue_res = await task;
+        // }
+
+
+        el.appendChild(table)
+
+
+        // renderSearchResultsTableHeader(table, searchView, searchResults.account)
+        // await renderSearchResultsTableBody(table, searchView, searchResults)
+
+        // const footer = renderSearchFooter(rootEl, searchView, searchResults)
+        // rootEl.replaceChildren(RC.renderContainer([table, footer]))
+
+
+
+
+        // this.registerMarkdownCodeBlockProcessor('yt-issue', async (source, el, ctx) => {
+        //     const content = source.split('\n').map(async line => await this.api.requestIssue(line) + '\n')
+
+        //     const bar = await Promise.all(content);
+
+        //     const header = `
+        //         <tr>
+        //             <th scope="col">ID задачи</th>
+        //             <th scope="col">Название</th>
+        //             <th scope="col">Дата начала</th>
+        //             <th scope="col">Исполнитель</th>
+        //             <th scope="col">Статус</th>
+        //         </tr>
+        //     `
+
+        //     el.innerHTML = '<table>' + header + bar.join("\n") + '</table>'
+        // })
+
+        // public async requestIssue(issueID: string) {
+        //     try {
+
+        //         const URL = this.baseURL + 'issues/' + issueID + `?expand=attachments`
+
+        //         const json_resp = await (await this.request(URL)).json
+
+
+        //         return `<tr>
+        //             <td> ${this.convertIssueID(issueID)} </td>
+        //             <td> ${this.convertSummary(json_resp['summary'])} </td>
+        //             <td> ${json_resp['statusStartTime'].split('T')[0]} </td>
+        //             <td> ${this.convertName(json_resp['assignee']['display'])} </td>
+        //             <td> ${json_resp['status']['display']} </td>
+        //         </tr>`
+        //     } catch {
+        //         return ""
+        //     }
+        // }
     }
 
     private async queueProcessor(source, el, ctx) {

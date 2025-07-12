@@ -3,6 +3,11 @@ import { isFail, YTAPI } from "./API/YTAPI";
 import { SettingsData } from "./Settings/Settings";
 import { FailResponse } from "./API/APIBase";
 
+import { Board } from "./Model/Board";
+import { Issue } from "./Model/Issue";
+import { Queue } from "./Model/Queue";
+import { User } from "./Model/User";
+
 
 // Шлёт много запросов для формирования консистентной модельки
 
@@ -18,6 +23,37 @@ export class YTClient implements TestableRequestProvider {
         this.yTAPI = new YTAPI(settingsData)
     }
 
+
+
+    public async getBoard(boardID: string): Promise<Board> {
+        return new Board()
+    }
+
+    public async getIssue(issueID: string): Promise<Issue>  {
+        const issue = await this.yTAPI.requestIssue(issueID)
+
+
+        console.log(issue)
+        // const assigneePromise = this.yTAPI.requestIssue(issue.assignee.id)
+
+        // let result = new Issue(issue)
+        // result.addAssignee(await assigneePromise)
+
+        return new Issue()
+    }
+
+    public async getQueue(queueID: string): Promise<Queue>  {
+        return new Queue()
+    }
+
+    public async getUser(userID: string): Promise<User>  {
+        return new User()
+    }
+
+    public async getTest() {
+
+    }
+
     public async testReq() {
         this.yTAPI.testReq()
 
@@ -28,12 +64,12 @@ export class YTClient implements TestableRequestProvider {
         const responseFail = await this.yTAPI.testFail()
         console.log(responseFail)
         console.log("--------------------------------------------------")
-        
+
         console.log("\ntesting unauth\n--------------------------------------------------")
         const responseUnauth = await this.yTAPI.testUnauth()
         console.log(responseUnauth)
         console.log("--------------------------------------------------")
-        
+
     }
 
     public async testConnection(): Promise<void> {
