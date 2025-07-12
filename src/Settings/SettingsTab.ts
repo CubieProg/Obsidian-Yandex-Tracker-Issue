@@ -2,11 +2,13 @@ import { ButtonComponent, Notice, Plugin, PluginSettingTab, requestUrl, Setting,
 import * as obsidian from 'obsidian';
 import { YTISettings } from './Settings'
 import { linkVariable } from '../utils';
+import { TestableRequestProvider } from '../YTClient';
 
 
 export class YTISettingsTab extends PluginSettingTab {
-    plugin: Plugin
-    settings: YTISettings
+    private plugin: Plugin
+    private settings: YTISettings
+    private tester: TestableRequestProvider;
 
     private showClientId = new linkVariable(false)
     private showClientSecret = new linkVariable(false)
@@ -14,11 +16,14 @@ export class YTISettingsTab extends PluginSettingTab {
     private showOrgId = new linkVariable(false)
 
 
-    constructor(plugin: Plugin, settings: YTISettings) {
+    constructor(plugin: Plugin, settings: YTISettings, tester: TestableRequestProvider) {
         super(plugin.app, plugin)
         this.plugin = plugin
         this.settings = settings
+        this.tester = tester
     }
+
+
 
     private addHiddenText(
         containerEl: HTMLElement,
@@ -110,31 +115,12 @@ export class YTISettingsTab extends PluginSettingTab {
                 component
                     .setButtonText("Проверить")
                     .onClick(async (evt: MouseEvent) => {
-                        new Notice(`Тест подключения`)
-                        // const URL = `https://api.tracker.yandex.net/v3/issues/_search?expand=transitions`
 
-                        // const URL = `https://oauth.yandex.ru/authorize?response_type=token&client_id=${this.settings.data.clientId}`
-                        const URL = `https://api.tracker.yandex.net/v3/issues/IIFA-8995?expand=attachments`
+                        if (!this.tester) {
+                            new Notice("Не могу протестировать подключение.\n\nОткройте, пожалуйста, ISSUE на гитхабе в репозитории данного плагина по данной проблеме.")
+                        }
 
-                        const testData = await requestUrl({
-                            url: URL,
-                            method: "GET",
-                            headers: {
-                                // "Host": "api.tracker.yandex.net",
-                                "Authorization": "OAuth " + this.settings.data.oauth,
-                                "X-Org-ID": this.settings.data.orgId
-                            },
-                            // body: JSON.stringify(params)
-                        })
-                            .then(async (response) => {
-                                return response
-                                // return (await response.json)
-                            })
-                            .catch(err => {
-                                console.log(err)
-                            })
-
-                        console.log(testData)
+                        this.tester.testConnection()
                     })
             )
     }

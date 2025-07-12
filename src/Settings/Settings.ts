@@ -3,6 +3,7 @@ import { Notice, Plugin } from 'obsidian';
 import { isTypeOf } from '../utils';
 
 
+
 export class SettingsData {
     clientId: string = "";
     clientSecret: string = "";
@@ -19,15 +20,15 @@ export class YTISettings {
         this.plugin = plugin
     }
 
-    private crushedDataNotice(){
+    private crushedDataNotice() {
         new Notice(`Файл 'data.json' повреждён и будет восстановлен до стандартных значений.`)
     }
 
     public async load() {
         let data = await this.plugin.loadData()
 
-        if (!isTypeOf(data, SettingsData)){
-            if(data !== null){
+        if (!isTypeOf(data, SettingsData)) {
+            if (data !== null) {
                 this.crushedDataNotice()
             }
 
@@ -47,12 +48,12 @@ export class YTISettings {
         this.data.clientId = clientId
         await this.save()
     }
-    
+
     public async setClientSecret(clientSecret: string) {
         this.data.clientSecret = clientSecret
         await this.save()
     }
-    
+
     public async setOrgId(orgId: string) {
         this.data.orgId = orgId
         await this.save()
