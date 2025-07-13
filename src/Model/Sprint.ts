@@ -4,6 +4,7 @@ import { User } from "./User"
 export class Sprint implements IYaTrDTO {
 
     public readonly DTOName: string = "Sprint"
+    public readonly DTOType: any = Sprint
 
     public name: string
     public self: string

@@ -6,23 +6,50 @@ import { Version } from './UtilTypes/Version'
 export class Queue implements IYaTrDTO {
 
     public readonly DTOName: string = "Queue"
+    public readonly DTOType: any = Queue
 
-    readonly self: string
-    readonly id: string
-    readonly key: string
-    readonly version: number
-    readonly name: string
-    readonly description: string
-    readonly lead: User
-    readonly assignAuto: boolean
-    readonly defaultType: IssueType
-    readonly defaultPriority: Priority
-    readonly teamUsers: User[]
-    readonly issueTypes: IssueType[]
-    readonly versions: Version
-    readonly workflows: IssueType[] // ???
-    readonly denyVoting: boolean
-    readonly issueTypesConfig: any[] // ConfigItem[]?
+    public self: string
+    public id: string
+    public key: string
+    public name: string
+    public description: string
+
+    public version: number
+    public assignAuto: boolean
+    public denyVoting: boolean
+
+    public defaultType: IssueType
+    public issueTypes: IssueType[]
+    public workflows: IssueType[] // ???
+    public defaultPriority: Priority
+    public issueTypesConfig: any[] // ConfigItem[]?
+
+    public lead: User
+    public teamUsers: User[]
 
     public readonly mainField: string = "name"
+
+    public static complexFiedls: Object = {
+    }
+
+    public static aliases: Object = {
+        "self": "Адрес ресурса",
+        "id": "Hash-ID очереди",
+        "key": "ID очереди",
+        "name": "Название",
+        "description": "Описание",
+
+        "version": "Версия",
+        "assignAuto": "Автоназначение исполнителя",
+        "denyVoting": "Можно голосовать",
+
+        "defaultType": "Тип задач по умолчанию",
+        "issueTypes": "Типы задач",
+        "workflows": "Жизненные циклы",
+        "defaultPriority": "Приоритет по умолчанию",
+        "issueTypesConfig": "Настройки типов задач",
+
+        "lead": "Руководитель",
+        "teamUsers": "Команда",
+    }
 }

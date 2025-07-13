@@ -30,8 +30,7 @@ export class User implements IYaTrDTO {
 
     public readonly mainField: string = "display"
 
-    public static complexFiedls: Object = {
-    }
+    public static complexFiedls: Object = {}
 
     public static aliases: Object = {
         // Base types

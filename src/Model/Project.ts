@@ -3,6 +3,7 @@ import { User } from "./User"
 export class Project implements IYaTrDTO {
 
     public readonly DTOName: string = "Project"
+    public readonly DTOType: any = Project
 
     public description: string
     public key: string
