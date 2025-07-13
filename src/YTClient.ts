@@ -10,6 +10,7 @@ import { User } from "./Model/User";
 import { Sprint } from "./Model/Sprint";
 import { Project } from "./Model/Project";
 import { Type } from "typescript";
+import { IYaTrDTO } from "./Model/UtilTypes/IYaTrDTO";
 
 
 // Шлёт много запросов для формирования консистентной модельки
@@ -52,6 +53,36 @@ export class YTClient implements TestableRequestProvider {
         return this[`get${fieldName}`](baseObject[attrName]['id'].toString())
     }
 
+    private async GenericRequest<T>(
+        entityId: string,
+        deep: boolean = true,
+        complexFields: Array<string> | "none" | "all" = "none",
+        entityClass: { new(): T }
+    ): Promise<T> {
+        const instance: T = new entityClass()
+        const iinstance: IYaTrDTO = instance as IYaTrDTO
+        const className: string = (instance as IYaTrDTO).DTOName
+        const entity = (await this.yTAPI[`request${className}`](entityId)) as T
+
+        if (deep && complexFields !== "none") {
+            let promiseObject = new Object()
+
+            for (let key in iinstance.DTOType.complexFiedls) {
+                promiseObject[key] = this.requestIfNeed(entity as Object, key, complexFields, iinstance.DTOType)
+            }
+
+            for (let key in promiseObject) {
+                entity[key] = await promiseObject[key]
+            }
+        } else {
+            for (let key in iinstance.DTOType.complexFiedls) {
+                entity[key] = undefined
+            }
+        }
+
+        return entity
+    }
+
 
 
     public async getBoard(
@@ -59,25 +90,7 @@ export class YTClient implements TestableRequestProvider {
         deep: boolean = true,
         complexFields: Array<string> | "none" | "all" = "none"
     ): Promise<Board> {
-        const board = (await this.yTAPI.requestBoard(boardId)) as Board
-
-        if (deep && complexFields !== "none") {
-            let promiseObject = new Object()
-
-            for (let key in Board.complexFiedls) {
-                promiseObject[key] = this.requestIfNeed(board, key, complexFields, Board)
-            }
-
-            for (let key in promiseObject) {
-                board[key] = await promiseObject[key]
-            }
-        } else {
-            for (let key in Board.complexFiedls) {
-                board[key] = undefined
-            }
-        }
-
-        return board
+        return this.GenericRequest(boardId, deep, complexFields, Board)
     }
 
     public async getIssue(
@@ -85,25 +98,7 @@ export class YTClient implements TestableRequestProvider {
         deep: boolean = true,
         complexFields: Array<string> | "none" | "all" = "none"
     ): Promise<Issue> {
-        const issue = (await this.yTAPI.requestIssue(issueID)) as Issue
-
-        if (deep && complexFields !== "none") {
-            let promiseObject = new Object()
-
-            for (let key in Issue.complexFiedls) {
-                promiseObject[key] = this.requestIfNeed(issue, key, complexFields, Issue)
-            }
-
-            for (let key in promiseObject) {
-                issue[key] = await promiseObject[key]
-            }
-        } else {
-            for (let key in Issue.complexFiedls) {
-                issue[key] = undefined
-            }
-        }
-
-        return issue
+        return this.GenericRequest(issueID, deep, complexFields, Issue)
     }
 
     public async getSprint(
@@ -111,25 +106,7 @@ export class YTClient implements TestableRequestProvider {
         deep: boolean = true,
         complexFields: Array<string> | "none" | "all" = "none"
     ): Promise<Sprint> {
-        const sprint = (await this.yTAPI.requestSprint(sprintID)) as Sprint
-
-        if (deep && complexFields !== "none") {
-            let promiseObject = new Object()
-
-            for (let key in Sprint.complexFiedls) {
-                promiseObject[key] = this.requestIfNeed(sprint, key, complexFields, Sprint)
-            }
-
-            for (let key in promiseObject) {
-                sprint[key] = await promiseObject[key]
-            }
-        } else {
-            for (let key in Sprint.complexFiedls) {
-                sprint[key] = undefined
-            }
-        }
-
-        return sprint
+        return this.GenericRequest(sprintID, deep, complexFields, Sprint)
     }
 
 
@@ -138,25 +115,7 @@ export class YTClient implements TestableRequestProvider {
         deep: boolean = true,
         complexFields: Array<string> | "none" | "all" = "none"
     ): Promise<Project> {
-        const project = (await this.yTAPI.requestProject(projectID)) as Project
-
-        if (deep && complexFields !== "none") {
-            let promiseObject = new Object()
-
-            for (let key in Project.complexFiedls) {
-                promiseObject[key] = this.requestIfNeed(project, key, complexFields, Project)
-            }
-
-            for (let key in promiseObject) {
-                project[key] = await promiseObject[key]
-            }
-        } else {
-            for (let key in Project.complexFiedls) {
-                project[key] = undefined
-            }
-        }
-
-        return project
+        return this.GenericRequest(projectID, deep, complexFields, Project)
     }
 
     public async getQueue(
@@ -164,25 +123,7 @@ export class YTClient implements TestableRequestProvider {
         deep: boolean = true,
         complexFields: Array<string> | "none" | "all" = "none"
     ): Promise<Queue> {
-        const queue = (await this.yTAPI.requestQueue(queueID)) as Queue
-
-        if (deep && complexFields !== "none") {
-            let promiseObject = new Object()
-
-            for (let key in Queue.complexFiedls) {
-                promiseObject[key] = this.requestIfNeed(queue, key, complexFields, Queue)
-            }
-
-            for (let key in promiseObject) {
-                queue[key] = await promiseObject[key]
-            }
-        } else {
-            for (let key in Queue.complexFiedls) {
-                queue[key] = undefined
-            }
-        }
-
-        return queue
+        return this.GenericRequest(queueID, deep, complexFields, Queue)
     }
 
     public async getUser(
@@ -190,49 +131,9 @@ export class YTClient implements TestableRequestProvider {
         deep: boolean = true,
         complexFields: Array<string> | "none" | "all" = "none"
     ): Promise<User> {
-
-        const user = (await this.yTAPI.requestUser(userID)) as User
-
-        if (deep && complexFields !== "none") {
-            let promiseObject = new Object()
-
-            for (let key in User.complexFiedls) {
-                promiseObject[key] = this.requestIfNeed(user, key, complexFields, User)
-            }
-
-            for (let key in promiseObject) {
-                user[key] = await promiseObject[key]
-            }
-        } else {
-            for (let key in User.complexFiedls) {
-                user[key] = undefined
-            }
-        }
-
-        return user
+        return this.GenericRequest(userID, deep, complexFields, User)
     }
 
-    public async getTest() {
-
-    }
-
-    public async testReq() {
-        this.yTAPI.testReq()
-
-        const responseTest = await this.yTAPI.requestTest()
-        console.log(responseTest)
-
-        console.log("\ntesting fail\n--------------------------------------------------")
-        const responseFail = await this.yTAPI.testFail()
-        console.log(responseFail)
-        console.log("--------------------------------------------------")
-
-        console.log("\ntesting unauth\n--------------------------------------------------")
-        const responseUnauth = await this.yTAPI.testUnauth()
-        console.log(responseUnauth)
-        console.log("--------------------------------------------------")
-
-    }
 
     public async testConnection(): Promise<void> {
         const responseTest = await this.yTAPI.requestTest()
