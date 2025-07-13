@@ -1,4 +1,5 @@
 
+import { IYaTrDTO } from './UtilTypes/IYaTrDTO'
 
 export class User implements IYaTrDTO {
 

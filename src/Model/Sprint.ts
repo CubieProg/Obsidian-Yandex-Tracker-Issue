@@ -1,5 +1,6 @@
 import { Board } from "./Board"
 import { User } from "./User"
+import { IYaTrDTO } from './UtilTypes/IYaTrDTO'
 
 export class Sprint implements IYaTrDTO {
 

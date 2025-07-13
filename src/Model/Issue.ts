@@ -6,7 +6,7 @@ import { Priority } from './UtilTypes/Priority'
 import { Status } from './UtilTypes/Status'
 import { IssueType } from './UtilTypes/IssueType'
 import { Board } from './Board'
-// import {IYaTrDTO} from './UtilTypes/IYaTrDTO'
+import {IYaTrDTO} from './UtilTypes/IYaTrDTO'
 
 
 export class Issue implements IYaTrDTO {

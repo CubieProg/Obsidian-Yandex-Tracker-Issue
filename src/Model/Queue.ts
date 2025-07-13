@@ -2,6 +2,7 @@ import { User } from './User'
 import { IssueType } from './UtilTypes/IssueType'
 import { Priority } from './UtilTypes/Priority'
 import { Version } from './UtilTypes/Version'
+import { IYaTrDTO } from './UtilTypes/IYaTrDTO'
 
 export class Queue implements IYaTrDTO {
 

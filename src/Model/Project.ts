@@ -1,4 +1,5 @@
 import { User } from "./User"
+import { IYaTrDTO } from './UtilTypes/IYaTrDTO'
 
 export class Project implements IYaTrDTO {
 
