@@ -63,12 +63,7 @@ export class YTClient implements TestableRequestProvider {
     public async getIssue(issueID: string, deep: boolean = true, complexFields: Array<string> | "none" | "all" = "none"): Promise<Issue> {
         const issue = (await this.yTAPI.requestIssue(issueID)) as Issue
 
-
-        console.log("Raw issue")
-        console.log(issue)
-
         if (deep && complexFields !== "none") {
-
             let promiseObject = new Object()
 
             for (let key in Issue.complexFiedls) {
@@ -78,39 +73,12 @@ export class YTClient implements TestableRequestProvider {
             for (let key in promiseObject) {
                 issue[key] = await promiseObject[key]
             }
-
-            // const updatedByPromise = this.requestIfNeed(issue, "updatedBy", complexFields, Issue)
-            // const createdByPromise = this.requestIfNeed(issue, "createdBy", complexFields, Issue)
-            // const assigneePromise = this.requestIfNeed(issue, "assignee", complexFields, Issue)
-            // const projectPromise = this.requestIfNeed(issue, "project", complexFields, Issue)
-            // const queuePromise = this.requestIfNeed(issue, "queue", complexFields, Issue)
-            // const parentPromise = this.requestIfNeed(issue, "parent", complexFields, Issue)
-            // const sprintPromise = this.requestIfNeed(issue, "sprint", complexFields, Issue)
-
-            // issue.updatedBy = await updatedByPromise
-            // // issue.followers = followersPromise ? await Promise.all(followersPromise) : issue.followers
-            // issue.createdBy = await createdByPromise
-            // issue.assignee = await assigneePromise
-            // issue.project = await projectPromise
-            // issue.queue = await queuePromise
-            // issue.parent = await parentPromise
-            // issue.sprint = await sprintPromise
-
-            console.log("updatedBy", issue.updatedBy)
         } else {
-            issue.updatedBy = undefined
-            issue.followers = undefined
-            issue.createdBy = undefined
-            issue.assignee = undefined
-            issue.project = undefined
-            issue.queue = undefined
-            issue.parent = undefined
-            issue.sprint = undefined
+            for (let key in Issue.complexFiedls) {
+                issue[key] = undefined
+            }
         }
 
-
-        console.log("Processed issue")
-        console.log(issue)
         return issue
     }
 
@@ -134,7 +102,6 @@ export class YTClient implements TestableRequestProvider {
     }
 
     public async getUser(userID: string, deep: boolean = true): Promise<User> {
-        console.log("userId", userID)
         const user = await this.yTAPI.requestUser(userID)
 
         return user as User
