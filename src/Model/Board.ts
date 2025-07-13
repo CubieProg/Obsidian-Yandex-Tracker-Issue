@@ -4,6 +4,7 @@ import { Column } from './UtilTypes/Column'
 export class Board implements IYaTrDTO {
 
     public readonly DTOName: string = "Board"
+    public readonly DTOType: any = Board
 
     readonly self: string
     readonly id: string
@@ -19,4 +20,7 @@ export class Board implements IYaTrDTO {
     readonly country: string
     readonly defaultQueue: string
     readonly calendar: string
+
+    
+    public readonly mainField: string = "name"
 }

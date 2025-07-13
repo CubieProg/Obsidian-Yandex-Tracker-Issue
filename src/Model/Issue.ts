@@ -12,6 +12,7 @@ import { Board } from './Board'
 export class Issue implements IYaTrDTO {
 
     public readonly DTOName: string = "Issue"
+    public readonly DTOType: any = Issue
 
     // Base types
     public self: string
@@ -64,7 +65,7 @@ export class Issue implements IYaTrDTO {
         "sprint": new Sprint()
     }
 
-    public static alieses: Object = {
+    public static aliases: Object = {
         // Base types
         "self": "Адрес ресурса",
         "id": "Hash-ID задачи",

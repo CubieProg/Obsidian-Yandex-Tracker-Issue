@@ -20,7 +20,7 @@ class YTIPlugin extends Plugin {
 
         this.addSettingTab(new YTISettingsTab(this, this.settings, this.YandexTrackerClient))
 
-        this.markdownParser = new MarkdownParser(this.YandexTrackerClient, this)
+        this.markdownParser = new MarkdownParser(this.YandexTrackerClient, this, this.settings)
 
 
         // this.registerMarkdownCodeBlockProcessor('yt-test', async (source, el, ctx) => {

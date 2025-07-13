@@ -29,7 +29,7 @@ export class Sprint implements IYaTrDTO {
         "board": new Board(),
     }
 
-    public static alieses: Object = {
+    public static aliases: Object = {
         // Base types
         "name": "Название",
         "self": "Адрес ресурса",

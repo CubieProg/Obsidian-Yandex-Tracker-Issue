@@ -24,7 +24,7 @@ export class Project implements IYaTrDTO {
         "lead": new User()
     }
 
-    public static alieses: Object = {
+    public static aliases: Object = {
         // Base types
         "description": "Описание",
         "key": "Название",

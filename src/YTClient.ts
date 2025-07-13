@@ -30,13 +30,11 @@ export class YTClient implements TestableRequestProvider {
         this.yTAPI = new YTAPI(settingsData)
     }
 
-    private inComplexFields(attr: string, complexFiedls: Array<string> | "none" | "all") {
+    private isComplexField(attr: string, complexFiedls: Array<string> | "none" | "all") {
         if (complexFiedls === "none") { return false }
         if (complexFiedls === "all") { return true }
         return complexFiedls.contains(attr)
     }
-
-
 
     private requestIfNeed(
         baseObject: object,
@@ -44,7 +42,7 @@ export class YTClient implements TestableRequestProvider {
         complexFields: Array<string> | "none" | "all",
         dtoType: any
     ) {
-        const condition = this.inComplexFields(attrName, complexFields) &&
+        const condition = this.isComplexField(attrName, complexFields) &&
             baseObject[attrName] &&
             baseObject[attrName]['id']
 

@@ -1,18 +1,37 @@
 import { Plugin } from 'obsidian';
 import { YTClient } from '../YTClient';
 import { Issue } from '../Model/Issue';
-import { text } from 'stream/consumers';
+import { DisplayAttribute, YTISettings } from '../Settings/Settings';
 
 export class MarkdownParser {
 
     private yTClient: YTClient;
     private plugin: Plugin;
+    private settings: YTISettings;
 
-    constructor(yTClient: YTClient, plugin: Plugin) {
+    constructor(yTClient: YTClient, plugin: Plugin, settings: YTISettings) {
         this.yTClient = yTClient
         this.plugin = plugin
+        this.settings = settings
 
         this.registerProcessors()
+    }
+
+
+    private extract(entity: Object, entityType: any, displayAttribute: DisplayAttribute) {
+
+        // надо сменить .mainField-ы
+
+        const field = displayAttribute.secondLayer ? 
+            displayAttribute.secondLayer : 
+            entityType.complexFiedls[displayAttribute.firstLayer].mainField
+
+        if (
+            displayAttribute.firstLayer in entityType.complexFiedls &&
+            field in entity[displayAttribute.firstLayer]
+        ) {
+            return entity[displayAttribute.firstLayer][field]
+        }
     }
 
     private registerProcessors() {
@@ -25,14 +44,22 @@ export class MarkdownParser {
 
     private async issueProcessor(source, el: HTMLElement, ctx): Promise<void> {
         // const display_attrs = ["status", "priority", "previousStatus", "type"]
-        //     .filter(item => item in Issue.alieses)
+        //     .filter(item => item in Issue.aliases)
 
-        const display_attrs = ["updatedBy", "createdBy", "assignee", "project", "queue", "parent", "sprint"]
-            .filter(item => item in Issue.alieses)
+        // const display_attrs = ["updatedBy", "createdBy", "assignee", "project", "queue", "parent", "sprint"]
+        //     .filter(item => item in Issue.aliases)
+
+
+        // const display_attrs = this.settings.data.issueAttrs.contains('all') ?
+        //     Object.keys(Issue.aliases) :
+        //     this.settings.data.issueAttrs.filter(item => item.firstLayer in Issue.aliases)
+
+
+        const display_attrs = this.settings.data.issueAttrs.filter(item => item.firstLayer in Issue.aliases)
 
         const content_lines: string[] = source.split('\n');
         const issues_tasks: Promise<Issue>[] = content_lines.map(
-            (line: string) => this.yTClient.getIssue(line, true, display_attrs)
+            (line: string) => this.yTClient.getIssue(line, true, display_attrs.map(item => item.firstLayer))
         )
 
         const table = createEl('table')
@@ -50,10 +77,14 @@ export class MarkdownParser {
         table.appendChild(body)
 
 
-        display_attrs.forEach((item: string) => {
+        display_attrs.forEach((item: DisplayAttribute) => {
 
-            const column = createEl('th', { attr: { text: Issue.alieses[item] }, parent: head_line })
-            column.innerHTML = Issue.alieses[item]
+            const column = createEl('th', { attr: { text: Issue.aliases[item.firstLayer] }, parent: head_line })
+            column.innerHTML = Issue.aliases[item.firstLayer]
+
+            if (item.secondLayer && Issue.complexFiedls.hasOwnProperty(item.firstLayer)) {
+                column.innerHTML += `.${Issue.complexFiedls[item.firstLayer].DTOType.aliases[item.secondLayer]}`
+            }
 
             head_line.appendChild(column)
         })
@@ -65,12 +96,14 @@ export class MarkdownParser {
 
             const issue_line = createEl('tr', { parent: body })
 
-            display_attrs.forEach((item: string) => {
-                let display_data = issue_res[item]
+            display_attrs.forEach((item: DisplayAttribute) => {
+                let display_data = issue_res[item.firstLayer]
                 try {
-                    if (item in Issue.complexFiedls && Issue.complexFiedls[item].mainField in issue_res[item]) {
-                        display_data = issue_res[item][Issue.complexFiedls[item].mainField]
+                    if (item.firstLayer in Issue.complexFiedls && Issue.complexFiedls[item.firstLayer].mainField in issue_res[item.firstLayer]) {
+                        display_data = issue_res[item.firstLayer][Issue.complexFiedls[item.firstLayer].mainField]
                     }
+
+                    display_data = this.extract(issue_res, Issue, item)
                 } catch {
                     display_data = "В Бобруйск!"
                 }

@@ -1,6 +1,6 @@
 import { ButtonComponent, Notice, Plugin, PluginSettingTab, requestUrl, Setting, TextComponent, ToggleComponent } from 'obsidian';
 import * as obsidian from 'obsidian';
-import { YTISettings } from './Settings'
+import { DisplayAttribute, YTISettings } from './Settings'
 import { linkVariable } from '../utils';
 import { TestableRequestProvider } from '../YTClient';
 
@@ -75,22 +75,26 @@ export class YTISettingsTab extends PluginSettingTab {
 
         containerEl.empty()
 
-        this.addHiddenText(
-            containerEl,
-            "Client ID",
-            'Укажите ваш Client ID',
-            'clientId',
-            this.showClientId
-        )
+        // this.addHiddenText(
+        //     containerEl,
+        //     "Client ID",
+        //     'Укажите ваш Client ID',
+        //     'clientId',
+        //     this.showClientId
+        // )
 
-        this.addHiddenText(
-            containerEl,
-            "Client Secret",
-            'Укажите ваш Client Secret',
-            'clientSecret',
-            this.showClientSecret
-        )
+        // this.addHiddenText(
+        //     containerEl,
+        //     "Client Secret",
+        //     'Укажите ваш Client Secret',
+        //     'clientSecret',
+        //     this.showClientSecret
+        // )
 
+
+        const auth_header = createEl('h1')
+        auth_header.innerHTML = "Авторизация."
+        containerEl.appendChild(auth_header)
 
         this.addHiddenText(
             containerEl,
@@ -108,6 +112,7 @@ export class YTISettingsTab extends PluginSettingTab {
             this.showOrgId
         )
 
+
         new Setting(containerEl)
             .setName('Проверка подключения')
             .setDesc('Проверка подключения к Yandex Tracker')
@@ -123,5 +128,99 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.tester.testConnection()
                     })
             )
+
+        const display_settings_header = createEl('h1')
+        display_settings_header.innerHTML = "Настройки отображения."
+        containerEl.appendChild(display_settings_header)
+
+        new Setting(containerEl)
+            .setName('Сбросить настройки до стандартных')
+            .setDesc('Настройки отображения таблиц сбросятся до стандартных')
+            .addButton((component: ButtonComponent) =>
+                component
+                    .setButtonText("Сбросить")
+                    .onClick(async (evt: MouseEvent) => {
+                        new Notice("Настройки были сброшены")
+                    })
+            )
+
+        new Setting(containerEl)
+            .setName('Атрибуты задач')
+            .setDesc('Атрибуты задач через пробел')
+            .addText((text) => {
+                text
+                    .setValue(this.settings.data.issueAttrs.map(item => (item as DisplayAttribute).convertToString()).join(" "))
+                    .onChange(async (value: string) => {
+                        this.settings.data.issueAttrs = value
+                            .split(" ")
+                            .map(token => DisplayAttribute.parseFromString(token))
+                        await this.settings.save()
+                    })
+            });
+
+
+        new Setting(containerEl)
+            .setName('Атрибуты досок')
+            .setDesc('Атрибуты досок через пробел')
+            .addText((text) => {
+                text
+                    .setValue(this.settings.data.boardAttrs.join(" "))
+                    .onChange(async (value: string) => {
+                        this.settings.data.boardAttrs = value.split(" ")
+                        await this.settings.save()
+                    })
+            });
+
+
+        new Setting(containerEl)
+            .setName('Атрибуты проектов')
+            .setDesc('Атрибуты проектов через пробел')
+            .addText((text) => {
+                text
+                    .setValue(this.settings.data.projectAttrs.join(" "))
+                    .onChange(async (value: string) => {
+                        this.settings.data.projectAttrs = value.split(" ")
+                        await this.settings.save()
+                    })
+            });
+
+
+        new Setting(containerEl)
+            .setName('Атрибуты очередей')
+            .setDesc('Атрибуты очередей через пробел')
+            .addText((text) => {
+                text
+                    .setValue(this.settings.data.queueAttrs.join(" "))
+                    .onChange(async (value: string) => {
+                        this.settings.data.queueAttrs = value.split(" ")
+                        await this.settings.save()
+                    })
+            });
+
+
+        new Setting(containerEl)
+            .setName('Атрибуты спринтов')
+            .setDesc('Атрибуты спринтов через пробел')
+            .addText((text) => {
+                text
+                    .setValue(this.settings.data.sprintAttrs.join(" "))
+                    .onChange(async (value: string) => {
+                        this.settings.data.sprintAttrs = value.split(" ")
+                        await this.settings.save()
+                    })
+            });
+
+
+        new Setting(containerEl)
+            .setName('Атрибуты пользователей')
+            .setDesc('Атрибуты пользователей через пробел')
+            .addText((text) => {
+                text
+                    .setValue(this.settings.data.userAttrs.join(" "))
+                    .onChange(async (value: string) => {
+                        this.settings.data.userAttrs = value.split(" ")
+                        await this.settings.save()
+                    })
+            });
     }
 }
