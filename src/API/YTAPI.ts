@@ -33,7 +33,6 @@ export class YTAPI {
     }
 
 
-
     private buildHeaders() {
         return {
             "Authorization": "OAuth " + this.settingsData.oauth,

@@ -31,6 +31,7 @@ export class Queue implements IYaTrDTO {
     public readonly mainField: string = "name"
 
     public static complexFiedls: Object = {
+        "lead": new User(),
     }
 
     public static aliases: Object = {

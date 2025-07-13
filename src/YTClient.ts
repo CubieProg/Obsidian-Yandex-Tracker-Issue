@@ -106,29 +106,110 @@ export class YTClient implements TestableRequestProvider {
         return issue
     }
 
-    public async getSprint(sprintID: string, deep: boolean = true) {
-        const sprint = await this.yTAPI.requestSprint(sprintID)
+    public async getSprint(
+        sprintID: string,
+        deep: boolean = true,
+        complexFields: Array<string> | "none" | "all" = "none"
+    ): Promise<Sprint> {
+        const sprint = (await this.yTAPI.requestSprint(sprintID)) as Sprint
 
-        return sprint as Sprint
+        if (deep && complexFields !== "none") {
+            let promiseObject = new Object()
+
+            for (let key in Sprint.complexFiedls) {
+                promiseObject[key] = this.requestIfNeed(sprint, key, complexFields, Sprint)
+            }
+
+            for (let key in promiseObject) {
+                sprint[key] = await promiseObject[key]
+            }
+        } else {
+            for (let key in Sprint.complexFiedls) {
+                sprint[key] = undefined
+            }
+        }
+
+        return sprint
     }
 
 
-    public async getProject(projectID: string, deep: boolean = true) {
-        const project = await this.yTAPI.requestProject(projectID)
+    public async getProject(
+        projectID: string,
+        deep: boolean = true,
+        complexFields: Array<string> | "none" | "all" = "none"
+    ): Promise<Project> {
+        const project = (await this.yTAPI.requestProject(projectID)) as Project
 
-        return project as Project
+        if (deep && complexFields !== "none") {
+            let promiseObject = new Object()
+
+            for (let key in Project.complexFiedls) {
+                promiseObject[key] = this.requestIfNeed(project, key, complexFields, Project)
+            }
+
+            for (let key in promiseObject) {
+                project[key] = await promiseObject[key]
+            }
+        } else {
+            for (let key in Project.complexFiedls) {
+                project[key] = undefined
+            }
+        }
+
+        return project
     }
 
-    public async getQueue(queueID: string, deep: boolean = true): Promise<Queue> {
-        const queue = await this.yTAPI.requestQueue(queueID)
+    public async getQueue(
+        queueID: string,
+        deep: boolean = true,
+        complexFields: Array<string> | "none" | "all" = "none"
+    ): Promise<Queue> {
+        const queue = (await this.yTAPI.requestQueue(queueID)) as Queue
 
-        return queue as Queue
+        if (deep && complexFields !== "none") {
+            let promiseObject = new Object()
+
+            for (let key in Queue.complexFiedls) {
+                promiseObject[key] = this.requestIfNeed(queue, key, complexFields, Queue)
+            }
+
+            for (let key in promiseObject) {
+                queue[key] = await promiseObject[key]
+            }
+        } else {
+            for (let key in Queue.complexFiedls) {
+                queue[key] = undefined
+            }
+        }
+
+        return queue
     }
 
-    public async getUser(userID: string, deep: boolean = true): Promise<User> {
-        const user = await this.yTAPI.requestUser(userID)
+    public async getUser(
+        userID: string,
+        deep: boolean = true,
+        complexFields: Array<string> | "none" | "all" = "none"
+    ): Promise<User> {
 
-        return user as User
+        const user = (await this.yTAPI.requestUser(userID)) as User
+
+        if (deep && complexFields !== "none") {
+            let promiseObject = new Object()
+
+            for (let key in User.complexFiedls) {
+                promiseObject[key] = this.requestIfNeed(user, key, complexFields, User)
+            }
+
+            for (let key in promiseObject) {
+                user[key] = await promiseObject[key]
+            }
+        } else {
+            for (let key in User.complexFiedls) {
+                user[key] = undefined
+            }
+        }
+
+        return user
     }
 
     public async getTest() {

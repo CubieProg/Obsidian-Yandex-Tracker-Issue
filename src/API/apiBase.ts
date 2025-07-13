@@ -33,7 +33,7 @@ export class API {
             headers: headers
         }).catch(
             async (err) => {
-                console.error(err)
+                console.error(`GET Request Fail. URL: ${URL}`, err)
                 await delay((retries + 1) * this.delayMultiplier)
                 return await this.request(URL, headers, skipRetry, retries + 1)
             }
