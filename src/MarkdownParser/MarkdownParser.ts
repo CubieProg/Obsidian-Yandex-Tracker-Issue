@@ -73,12 +73,13 @@ export class MarkdownParser {
             display_attrs.forEach((item: string) => {
 
                 let display_data = issue_res[item]
+                console.log(issue_res[item])
                 try {
                     console.log(issue_res[item])
                     if (item in Issue.complexFiedls && Issue.complexFiedls[item].mainField in issue_res[item]) {
                         display_data = issue_res[item][Issue.complexFiedls[item].mainField]
                     }
-                } catch { 
+                } catch {
                     display_data = "В Бобруйск!"
                 }
 

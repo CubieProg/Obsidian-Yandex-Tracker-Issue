@@ -71,7 +71,20 @@ export class YTAPI {
     }
 
     public async requestIssue(issueId: string) {
-        return await this.requestWrapper("issues", issueId)
+        let issue = await this.requestWrapper("issues", issueId)
+        if (issue["project"] !== undefined && issue["project"]["primary"] !== undefined) {
+            issue["project"] = issue["project"]["primary"]
+        }
+
+        return issue
+    }
+
+    public async requestProject(projectId: string) {
+        return await this.requestWrapper("projects", projectId)
+    }
+
+    public async requestSprint(sprintId: string) {
+        return await this.requestWrapper("sprints", sprintId)
     }
 
     public async requestQueue(queueId: string) {
@@ -97,7 +110,7 @@ export class YTAPI {
         let a = this.api.request(this.baseURL + "boards", this.buildHeaders())
     }
 
-    
+
 
     public async testFail() {
         return await this.api.request(this.baseURL + "fail", this.buildHeaders())

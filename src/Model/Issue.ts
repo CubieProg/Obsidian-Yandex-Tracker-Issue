@@ -5,6 +5,7 @@ import { User } from './User'
 import { Priority } from './UtilTypes/Priority'
 import { Status } from './UtilTypes/Status'
 import { IssueType } from './UtilTypes/IssueType'
+import { Board } from './Board'
 
 
 export class Issue {
@@ -33,6 +34,7 @@ export class Issue {
     public type: IssueType
 
     // Model types
+    public boards: Board[] | undefined
     public updatedBy: User | undefined
     public followers: User[] | undefined
     public createdBy: User | undefined
@@ -93,40 +95,4 @@ export class Issue {
         "parent": "Родеительская задача",
         "sprint": "Спринт",
     }
-
-
-    public static fromJson(json: any) {
-        const result: Issue = json as Issue
-
-
-
-        // result.updatedBy = 
-
-
-
-        // private updatedBy: User
-        // private followers: User[]
-        // private createdBy: User
-        // private assignee: User
-        // private project: Project
-        // private queue: Queue
-        // private parent: Issue
-        // private sprint: Sprint
-    }
-
-    public static table_columns: string[] = [
-        "ID задачи",
-        "Название",
-        "Дата начала",
-        "Дата окончания",
-        "Исполнитель",
-        "Статус"
-    ]
-
-    constructor() {
-
-    }
-
-
-
 }
