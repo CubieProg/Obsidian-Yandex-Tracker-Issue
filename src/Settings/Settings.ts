@@ -49,11 +49,11 @@ export class SettingsData {
 
 
     issueAttrs: DisplayAttribute[] = []
-    boardAttrs: string[] = []
-    projectAttrs: string[] = []
-    queueAttrs: string[] = []
-    sprintAttrs: string[] = []
-    userAttrs: string[] = []
+    boardAttrs: DisplayAttribute[] = []
+    projectAttrs: DisplayAttribute[] = []
+    queueAttrs: DisplayAttribute[] = []
+    sprintAttrs: DisplayAttribute[] = []
+    userAttrs: DisplayAttribute[] = []
 }
 
 
@@ -81,7 +81,13 @@ export class YTISettings {
             data = await this.plugin.loadData()
         }
 
+        
         data.issueAttrs = data.issueAttrs.map(item => new DisplayAttribute(item))
+        data.boardAttrs = data.boardAttrs.map(item => new DisplayAttribute(item))
+        data.projectAttrs = data.projectAttrs.map(item => new DisplayAttribute(item))
+        data.queueAttrs = data.queueAttrs.map(item => new DisplayAttribute(item))
+        data.sprintAttrs = data.sprintAttrs.map(item => new DisplayAttribute(item))
+        data.userAttrs = data.userAttrs.map(item => new DisplayAttribute(item))
         this.data = data
 
         // console.log(DisplayAttribute.parseFromString("lay1.lay2:initials:trim20:link"))

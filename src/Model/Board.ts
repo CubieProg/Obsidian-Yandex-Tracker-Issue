@@ -1,5 +1,6 @@
 import { User } from './User'
 import { Column } from './UtilTypes/Column'
+import { IYaTrDTO } from './UtilTypes/IYaTrDTO'
 
 export class Board implements IYaTrDTO {
 

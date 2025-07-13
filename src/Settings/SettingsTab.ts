@@ -164,9 +164,11 @@ export class YTISettingsTab extends PluginSettingTab {
             .setDesc('Атрибуты досок через пробел')
             .addText((text) => {
                 text
-                    .setValue(this.settings.data.boardAttrs.join(" "))
+                    .setValue(this.settings.data.boardAttrs.map(item => item.convertToString()).join(" "))
                     .onChange(async (value: string) => {
-                        this.settings.data.boardAttrs = value.split(" ")
+                        this.settings.data.boardAttrs = value
+                            .split(" ")
+                            .map(token => DisplayAttribute.parseFromString(token))
                         await this.settings.save()
                     })
             });
@@ -177,9 +179,11 @@ export class YTISettingsTab extends PluginSettingTab {
             .setDesc('Атрибуты проектов через пробел')
             .addText((text) => {
                 text
-                    .setValue(this.settings.data.projectAttrs.join(" "))
+                    .setValue(this.settings.data.projectAttrs.map(item => (item as DisplayAttribute).convertToString()).join(" "))
                     .onChange(async (value: string) => {
-                        this.settings.data.projectAttrs = value.split(" ")
+                        this.settings.data.projectAttrs = value
+                            .split(" ")
+                            .map(token => DisplayAttribute.parseFromString(token))
                         await this.settings.save()
                     })
             });
@@ -190,9 +194,11 @@ export class YTISettingsTab extends PluginSettingTab {
             .setDesc('Атрибуты очередей через пробел')
             .addText((text) => {
                 text
-                    .setValue(this.settings.data.queueAttrs.join(" "))
+                    .setValue(this.settings.data.queueAttrs.map(item => (item as DisplayAttribute).convertToString()).join(" "))
                     .onChange(async (value: string) => {
-                        this.settings.data.queueAttrs = value.split(" ")
+                        this.settings.data.queueAttrs = value
+                            .split(" ")
+                            .map(token => DisplayAttribute.parseFromString(token))
                         await this.settings.save()
                     })
             });
@@ -203,9 +209,11 @@ export class YTISettingsTab extends PluginSettingTab {
             .setDesc('Атрибуты спринтов через пробел')
             .addText((text) => {
                 text
-                    .setValue(this.settings.data.sprintAttrs.join(" "))
+                    .setValue(this.settings.data.sprintAttrs.map(item => (item as DisplayAttribute).convertToString()).join(" "))
                     .onChange(async (value: string) => {
-                        this.settings.data.sprintAttrs = value.split(" ")
+                        this.settings.data.sprintAttrs = value
+                            .split(" ")
+                            .map(token => DisplayAttribute.parseFromString(token))
                         await this.settings.save()
                     })
             });
@@ -216,9 +224,11 @@ export class YTISettingsTab extends PluginSettingTab {
             .setDesc('Атрибуты пользователей через пробел')
             .addText((text) => {
                 text
-                    .setValue(this.settings.data.userAttrs.join(" "))
+                    .setValue(this.settings.data.userAttrs.map(item => (item as DisplayAttribute).convertToString()).join(" "))
                     .onChange(async (value: string) => {
-                        this.settings.data.userAttrs = value.split(" ")
+                        this.settings.data.userAttrs = value
+                            .split(" ")
+                            .map(token => DisplayAttribute.parseFromString(token))
                         await this.settings.save()
                     })
             });

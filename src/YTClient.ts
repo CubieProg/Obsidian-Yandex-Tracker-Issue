@@ -54,11 +54,37 @@ export class YTClient implements TestableRequestProvider {
 
 
 
-    public async getBoard(boardID: string): Promise<Board> {
-        return new Board()
+    public async getBoard(
+        boardId: string,
+        deep: boolean = true,
+        complexFields: Array<string> | "none" | "all" = "none"
+    ): Promise<Board> {
+        const board = (await this.yTAPI.requestBoard(boardId)) as Board
+
+        if (deep && complexFields !== "none") {
+            let promiseObject = new Object()
+
+            for (let key in Board.complexFiedls) {
+                promiseObject[key] = this.requestIfNeed(board, key, complexFields, Board)
+            }
+
+            for (let key in promiseObject) {
+                board[key] = await promiseObject[key]
+            }
+        } else {
+            for (let key in Board.complexFiedls) {
+                board[key] = undefined
+            }
+        }
+
+        return board
     }
 
-    public async getIssue(issueID: string, deep: boolean = true, complexFields: Array<string> | "none" | "all" = "none"): Promise<Issue> {
+    public async getIssue(
+        issueID: string,
+        deep: boolean = true,
+        complexFields: Array<string> | "none" | "all" = "none"
+    ): Promise<Issue> {
         const issue = (await this.yTAPI.requestIssue(issueID)) as Issue
 
         if (deep && complexFields !== "none") {

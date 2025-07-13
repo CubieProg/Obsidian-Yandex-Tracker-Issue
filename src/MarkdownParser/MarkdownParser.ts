@@ -2,6 +2,7 @@ import { Plugin } from 'obsidian';
 import { YTClient } from '../YTClient';
 import { Issue } from '../Model/Issue';
 import { DisplayAttribute, YTISettings } from '../Settings/Settings';
+import { Board } from '../Model/Board';
 
 export class MarkdownParser {
 
@@ -20,11 +21,14 @@ export class MarkdownParser {
 
     private extract(entity: Object, entityType: any, displayAttribute: DisplayAttribute) {
 
-        // надо сменить .mainField-ы
+        if (!(displayAttribute.firstLayer in entityType.complexFiedls)) {
+            return entity[displayAttribute.firstLayer]
+        }
 
-        const field = displayAttribute.secondLayer ? 
-            displayAttribute.secondLayer : 
+        const field = displayAttribute.secondLayer ?
+            displayAttribute.secondLayer :
             entityType.complexFiedls[displayAttribute.firstLayer].mainField
+
 
         if (
             displayAttribute.firstLayer in entityType.complexFiedls &&
@@ -38,8 +42,69 @@ export class MarkdownParser {
         this.plugin.registerMarkdownCodeBlockProcessor('yt-issue', async (source, el, ctx) => {
             this.issueProcessor(source, el, ctx)
         })
+        this.plugin.registerMarkdownCodeBlockProcessor('yt-boards', async (source, el, ctx) => {
+            this.boardProcessor(source, el, ctx)
+        })
 
 
+    }
+
+    private async boardProcessor(source, el: HTMLElement, ctx): Promise<void> {
+
+        const display_attrs = this.settings.data.boardAttrs.filter(item => item.firstLayer in Board.aliases)
+
+        const content_lines: string[] = source.split('\n');
+        const boards_tasks: Promise<Board>[] = content_lines.map(
+            (line: string) => this.yTClient.getBoard(line, true, display_attrs.map(item => item.firstLayer))
+        )
+
+        const table = createEl('table')
+
+        const caption = createEl('caption', { attr: { text: "test caption" }, parent: table })
+        caption.innerHTML = "BOARDS"
+        table.appendChild(caption)
+
+        const head = createEl('thead', { parent: table })
+        const head_line = createEl('tr', { parent: head })
+        head.appendChild(head_line)
+        table.appendChild(head)
+
+        const body = createEl('tbody', { parent: table })
+        table.appendChild(body)
+
+        display_attrs.forEach((item: DisplayAttribute) => {
+
+            const column = createEl('th', { attr: { text: Board.aliases[item.firstLayer] }, parent: head_line })
+            column.innerHTML = Board.aliases[item.firstLayer]
+
+            if (item.secondLayer && Board.complexFiedls.hasOwnProperty(item.firstLayer)) {
+                column.innerHTML += `.${Board.complexFiedls[item.firstLayer].DTOType.aliases[item.secondLayer]}`
+            }
+
+            head_line.appendChild(column)
+        })
+
+        for (let task of boards_tasks) {
+            const board_res = await task;
+
+            const board_line = createEl('tr', { parent: body })
+
+            display_attrs.forEach((item: DisplayAttribute) => {
+                let display_data = board_res[item.firstLayer]
+                try {
+                    display_data = this.extract(board_res, Board, item)
+                } catch {
+                    display_data = "В Бобруйск!"
+                }
+
+                const column = createEl('td', { attr: { text: display_data }, parent: board_line })
+                column.innerHTML = display_data
+                board_line.appendChild(column)
+            })
+            body.appendChild(board_line)
+        }
+
+        el.appendChild(table)
     }
 
     private async issueProcessor(source, el: HTMLElement, ctx): Promise<void> {
@@ -64,9 +129,9 @@ export class MarkdownParser {
 
         const table = createEl('table')
 
-        // const caption = createEl('caption', { attr: { text: "test caption" }, parent: table })
-        // caption.innerHTML = "ISSUES"
-        // table.appendChild(caption)
+        const caption = createEl('caption', { attr: { text: "test caption" }, parent: table })
+        caption.innerHTML = "ISSUES"
+        table.appendChild(caption)
 
         const head = createEl('thead', { parent: table })
         const head_line = createEl('tr', { parent: head })
@@ -99,9 +164,6 @@ export class MarkdownParser {
             display_attrs.forEach((item: DisplayAttribute) => {
                 let display_data = issue_res[item.firstLayer]
                 try {
-                    if (item.firstLayer in Issue.complexFiedls && Issue.complexFiedls[item.firstLayer].mainField in issue_res[item.firstLayer]) {
-                        display_data = issue_res[item.firstLayer][Issue.complexFiedls[item.firstLayer].mainField]
-                    }
 
                     display_data = this.extract(issue_res, Issue, item)
                 } catch {
@@ -130,30 +192,3 @@ export class MarkdownParser {
 
     }
 }
-
-
-
-// public async requestBoard(boardId: string) {
-//     const response = await this.requestWrapper("boards", boardId)
-//     console.log(response)
-// }
-
-// public async requestIssue(issueId: string) {
-//     const response = await this.requestWrapper("issues", issueId)
-//     console.log(response)
-// }
-
-// public async requestQueue(queueId: string) {
-//     const response = await this.requestWrapper("queues", queueId)
-//     console.log(response)
-// }
-
-// public async requestUser(userId: string) {
-//     const response = await this.requestWrapper("users", userId)
-//     console.log(response)
-// }
-
-// public async requestMe() {
-//     const response = await this.requestWrapper("myself")
-//     console.log(response)
-// }
