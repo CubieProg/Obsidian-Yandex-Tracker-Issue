@@ -1,7 +1,10 @@
 import { User } from './User'
 import { Column } from './UtilTypes/Column'
 
-export class Board {
+export class Board implements IYaTrDTO {
+
+    public readonly DTOName: string = "Board"
+
     readonly self: string
     readonly id: string
     readonly version: string

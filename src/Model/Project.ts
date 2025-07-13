@@ -1,6 +1,8 @@
 import { User } from "./User"
 
-export class Project {
+export class Project implements IYaTrDTO {
+
+    public readonly DTOName: string = "Project"
 
     public description: string
     public key: string

@@ -9,6 +9,7 @@ import { Queue } from "./Model/Queue";
 import { User } from "./Model/User";
 import { Sprint } from "./Model/Sprint";
 import { Project } from "./Model/Project";
+import { Type } from "typescript";
 
 
 // Шлёт много запросов для формирования консистентной модельки
@@ -29,33 +30,73 @@ export class YTClient implements TestableRequestProvider {
         this.yTAPI = new YTAPI(settingsData)
     }
 
+    private inComplexFields(attr: string, complexFiedls: Array<string> | "none" | "all") {
+        if (complexFiedls === "none") { return false }
+        if (complexFiedls === "all") { return true }
+        return complexFiedls.contains(attr)
+    }
+
+
+
+    private requestIfNeed(
+        baseObject: object,
+        attrName: string,
+        complexFields: Array<string> | "none" | "all",
+        dtoType: any
+    ) {
+        const condition = this.inComplexFields(attrName, complexFields) &&
+            baseObject[attrName] &&
+            baseObject[attrName]['id']
+
+        if (!condition) { return baseObject[attrName] }
+
+        const fieldName = dtoType['complexFiedls'][attrName].DTOName
+        return this[`get${fieldName}`](baseObject[attrName]['id'].toString())
+    }
+
 
 
     public async getBoard(boardID: string): Promise<Board> {
         return new Board()
     }
 
-    public async getIssue(issueID: string, deep: boolean = true): Promise<Issue> {
+    public async getIssue(issueID: string, deep: boolean = true, complexFields: Array<string> | "none" | "all" = "none"): Promise<Issue> {
         const issue = (await this.yTAPI.requestIssue(issueID)) as Issue
 
-        if (deep) {
-            const updatedByPromise = issue.updatedBy && issue.updatedBy.id ? this.getUser(issue.updatedBy.id.toString()) : issue.updatedBy
-            const followersPromise = issue.followers ? issue.followers.filter(value => value.id).map(value => this.getUser(value.id.toString())) : issue.followers
-            const createdByPromise = issue.createdBy && issue.createdBy.id ? this.getUser(issue.createdBy.id.toString()) : issue.createdBy
-            const assigneePromise = issue.assignee && issue.assignee.id ? this.getUser(issue.assignee.id.toString()) : issue.assignee
-            const projectPromise = issue.project && issue.project.id ? this.getProject(issue.project.id.toString()) : issue.project
-            const queuePromise = issue.queue && issue.queue.id ? this.getQueue(issue.queue.id.toString()) : issue.queue
-            const parentPromise = issue.parent && issue.parent.id ? this.getIssue(issue.parent.id.toString(), false) : issue.parent
-            const sprintPromise = issue.sprint && issue.sprint.id ? this.getSprint(issue.sprint.id.toString(), false) : issue.sprint
 
-            issue.updatedBy = await updatedByPromise
-            issue.followers = followersPromise ? await Promise.all(followersPromise) : issue.followers
-            issue.createdBy = await createdByPromise
-            issue.assignee = await assigneePromise
-            issue.project = await projectPromise
-            issue.queue = await queuePromise
-            issue.parent = await parentPromise
-            issue.sprint = await sprintPromise
+        console.log("Raw issue")
+        console.log(issue)
+
+        if (deep && complexFields !== "none") {
+
+            let promiseObject = new Object()
+
+            for (let key in Issue.complexFiedls) {
+                promiseObject[key] = this.requestIfNeed(issue, key, complexFields, Issue)
+            }
+
+            for (let key in promiseObject) {
+                issue[key] = await promiseObject[key]
+            }
+
+            // const updatedByPromise = this.requestIfNeed(issue, "updatedBy", complexFields, Issue)
+            // const createdByPromise = this.requestIfNeed(issue, "createdBy", complexFields, Issue)
+            // const assigneePromise = this.requestIfNeed(issue, "assignee", complexFields, Issue)
+            // const projectPromise = this.requestIfNeed(issue, "project", complexFields, Issue)
+            // const queuePromise = this.requestIfNeed(issue, "queue", complexFields, Issue)
+            // const parentPromise = this.requestIfNeed(issue, "parent", complexFields, Issue)
+            // const sprintPromise = this.requestIfNeed(issue, "sprint", complexFields, Issue)
+
+            // issue.updatedBy = await updatedByPromise
+            // // issue.followers = followersPromise ? await Promise.all(followersPromise) : issue.followers
+            // issue.createdBy = await createdByPromise
+            // issue.assignee = await assigneePromise
+            // issue.project = await projectPromise
+            // issue.queue = await queuePromise
+            // issue.parent = await parentPromise
+            // issue.sprint = await sprintPromise
+
+            console.log("updatedBy", issue.updatedBy)
         } else {
             issue.updatedBy = undefined
             issue.followers = undefined
@@ -67,8 +108,9 @@ export class YTClient implements TestableRequestProvider {
             issue.sprint = undefined
         }
 
-        console.log(issue)
 
+        console.log("Processed issue")
+        console.log(issue)
         return issue
     }
 
@@ -92,6 +134,7 @@ export class YTClient implements TestableRequestProvider {
     }
 
     public async getUser(userID: string, deep: boolean = true): Promise<User> {
+        console.log("userId", userID)
         const user = await this.yTAPI.requestUser(userID)
 
         return user as User

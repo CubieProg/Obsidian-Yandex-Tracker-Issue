@@ -1,6 +1,9 @@
 
 
-export class User {
+export class User implements IYaTrDTO {
+
+    public readonly DTOName: string = "User"
+
     public self: string
     public id: string
     public uid: number

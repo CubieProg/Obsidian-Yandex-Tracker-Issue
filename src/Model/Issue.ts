@@ -6,9 +6,12 @@ import { Priority } from './UtilTypes/Priority'
 import { Status } from './UtilTypes/Status'
 import { IssueType } from './UtilTypes/IssueType'
 import { Board } from './Board'
+// import {IYaTrDTO} from './UtilTypes/IYaTrDTO'
 
 
-export class Issue {
+export class Issue implements IYaTrDTO {
+
+    public readonly DTOName: string = "Issue"
 
     // Base types
     public self: string
@@ -47,10 +50,10 @@ export class Issue {
     public readonly mainField: string = "summary"
 
     public static complexFiedls: Object = {
-        "status": new Status(),
-        "priority": new Priority(),
-        "previousStatus": new Status(),
-        "type": new IssueType(),
+        // "status": new Status(),
+        // "priority": new Priority(),
+        // "previousStatus": new Status(),
+        // "type": new IssueType(),
         "updatedBy": new User(),
         "followers": new Array<User>(),
         "createdBy": new User(),

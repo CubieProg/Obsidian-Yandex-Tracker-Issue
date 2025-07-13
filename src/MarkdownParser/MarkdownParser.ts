@@ -23,24 +23,23 @@ export class MarkdownParser {
 
     }
 
-    private async issueProcessor(source, el: HTMLElement, ctx) {
-
-        // const display_attrs = ["project", "sprint", "status", "createdAt", "assignee", "id", "key", "version", "summary", "aliases", "adasd"]
+    private async issueProcessor(source, el: HTMLElement, ctx): Promise<void> {
+        // const display_attrs = ["status", "priority", "previousStatus", "type"]
         //     .filter(item => item in Issue.alieses)
 
-
-        const display_attrs = ["sprint"]
+        const display_attrs = ["updatedBy", "createdBy", "assignee", "project", "queue", "parent", "sprint"]
             .filter(item => item in Issue.alieses)
 
-
         const content_lines: string[] = source.split('\n');
-        const issues_tasks: Promise<Issue>[] = content_lines.map((line: string) => this.yTClient.getIssue(line))
+        const issues_tasks: Promise<Issue>[] = content_lines.map(
+            (line: string) => this.yTClient.getIssue(line, true, display_attrs)
+        )
 
         const table = createEl('table')
 
-        const caption = createEl('caption', { attr: { text: "test caption" }, parent: table })
-        caption.innerHTML = "ISSUES"
-        table.appendChild(caption)
+        // const caption = createEl('caption', { attr: { text: "test caption" }, parent: table })
+        // caption.innerHTML = "ISSUES"
+        // table.appendChild(caption)
 
         const head = createEl('thead', { parent: table })
         const head_line = createEl('tr', { parent: head })
@@ -55,14 +54,10 @@ export class MarkdownParser {
 
             const column = createEl('th', { attr: { text: Issue.alieses[item] }, parent: head_line })
             column.innerHTML = Issue.alieses[item]
+
             head_line.appendChild(column)
         })
 
-        // Issue.table_columns.forEach((item: string) => {
-        //     const column = createEl('th', { attr: { text: item }, parent: head_line })
-        //     column.innerHTML = item
-        //     head_line.appendChild(column)
-        // })
 
 
         for (let task of issues_tasks) {
@@ -71,11 +66,8 @@ export class MarkdownParser {
             const issue_line = createEl('tr', { parent: body })
 
             display_attrs.forEach((item: string) => {
-
                 let display_data = issue_res[item]
-                console.log(issue_res[item])
                 try {
-                    console.log(issue_res[item])
                     if (item in Issue.complexFiedls && Issue.complexFiedls[item].mainField in issue_res[item]) {
                         display_data = issue_res[item][Issue.complexFiedls[item].mainField]
                     }
@@ -90,56 +82,7 @@ export class MarkdownParser {
             body.appendChild(issue_line)
         }
 
-
         el.appendChild(table)
-
-
-        // renderSearchResultsTableHeader(table, searchView, searchResults.account)
-        // await renderSearchResultsTableBody(table, searchView, searchResults)
-
-        // const footer = renderSearchFooter(rootEl, searchView, searchResults)
-        // rootEl.replaceChildren(RC.renderContainer([table, footer]))
-
-
-
-
-        // this.registerMarkdownCodeBlockProcessor('yt-issue', async (source, el, ctx) => {
-        //     const content = source.split('\n').map(async line => await this.api.requestIssue(line) + '\n')
-
-        //     const bar = await Promise.all(content);
-
-        //     const header = `
-        //         <tr>
-        //             <th scope="col">ID задачи</th>
-        //             <th scope="col">Название</th>
-        //             <th scope="col">Дата начала</th>
-        //             <th scope="col">Исполнитель</th>
-        //             <th scope="col">Статус</th>
-        //         </tr>
-        //     `
-
-        //     el.innerHTML = '<table>' + header + bar.join("\n") + '</table>'
-        // })
-
-        // public async requestIssue(issueID: string) {
-        //     try {
-
-        //         const URL = this.baseURL + 'issues/' + issueID + `?expand=attachments`
-
-        //         const json_resp = await (await this.request(URL)).json
-
-
-        //         return `<tr>
-        //             <td> ${this.convertIssueID(issueID)} </td>
-        //             <td> ${this.convertSummary(json_resp['summary'])} </td>
-        //             <td> ${json_resp['statusStartTime'].split('T')[0]} </td>
-        //             <td> ${this.convertName(json_resp['assignee']['display'])} </td>
-        //             <td> ${json_resp['status']['display']} </td>
-        //         </tr>`
-        //     } catch {
-        //         return ""
-        //     }
-        // }
     }
 
     private async queueProcessor(source, el, ctx) {

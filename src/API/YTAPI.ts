@@ -75,6 +75,9 @@ export class YTAPI {
         if (issue["project"] !== undefined && issue["project"]["primary"] !== undefined) {
             issue["project"] = issue["project"]["primary"]
         }
+        if (issue["sprint"] !== undefined && issue["sprint"].length > 0) {
+            issue["sprint"] = issue["sprint"][0]
+        }
 
         return issue
     }
@@ -95,6 +98,19 @@ export class YTAPI {
         return await this.requestWrapper("users", userId)
     }
 
+    public async requestStatus(statusId: string) {
+        return await this.requestWrapper('statuses', statusId)
+    }
+
+    public async requestPriority(priorityId: string) {
+        return await this.requestWrapper('priorities', priorityId)
+    }
+
+    public async requestIssueType(issueTypeId: string) {
+        return await this.requestWrapper('issuetypes', issueTypeId)
+    }
+
+
     public async requestMe() {
         return await this.requestWrapper("myself")
     }
@@ -102,9 +118,6 @@ export class YTAPI {
     public async requestTest() {
         return await this.requestWrapper("myself", null, null, true)
     }
-
-
-
 
     public async testReq() {
         let a = this.api.request(this.baseURL + "boards", this.buildHeaders())

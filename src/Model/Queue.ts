@@ -3,7 +3,10 @@ import { IssueType } from './UtilTypes/IssueType'
 import { Priority } from './UtilTypes/Priority'
 import { Version } from './UtilTypes/Version'
 
-export class Queue {
+export class Queue implements IYaTrDTO {
+
+    public readonly DTOName: string = "Queue"
+
     readonly self: string
     readonly id: string
     readonly key: string
