@@ -134,17 +134,6 @@ export class YTISettingsTab extends PluginSettingTab {
         containerEl.appendChild(display_settings_header)
 
         new Setting(containerEl)
-            .setName('Сбросить настройки до стандартных')
-            .setDesc('Настройки отображения таблиц сбросятся до стандартных')
-            .addButton((component: ButtonComponent) =>
-                component
-                    .setButtonText("Сбросить")
-                    .onClick(async (evt: MouseEvent) => {
-                        new Notice("Настройки были сброшены")
-                    })
-            )
-
-        new Setting(containerEl)
             .setName('Атрибуты задач')
             .setDesc('Атрибуты задач через пробел')
             .addText((text) => {
@@ -232,5 +221,16 @@ export class YTISettingsTab extends PluginSettingTab {
                         await this.settings.save()
                     })
             });
+
+        new Setting(containerEl)
+            .setName('Сбросить настройки до стандартных')
+            .setDesc('Настройки отображения таблиц сбросятся до стандартных')
+            .addButton((component: ButtonComponent) =>
+                component
+                    .setButtonText("Сбросить")
+                    .onClick(async (evt: MouseEvent) => {
+                        new Notice("Настройки были сброшены")
+                    })
+            )
     }
 }

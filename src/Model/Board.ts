@@ -1,4 +1,3 @@
-import { User } from './User'
 import { Column } from './UtilTypes/Column'
 import { IYaTrDTO } from './UtilTypes/IYaTrDTO'
 
