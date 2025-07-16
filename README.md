@@ -284,29 +284,29 @@ TASK-222
 	4. **Пример:** `undefined`  => `Нет`
 4. link - делает из текста ссылку HTML-элементом `<a/>`.
 	1. **Пример:** `https://www.minecraft.net`  => 
-	   ```html
+```html
 <a href="https://www.minecraft.net"> https://www.minecraft.net </a>
-		```
+```
  
 5. ytlink - делает из текста ссылку HTML-элементом `<a/>` на ресурс Yandex Tracker-а
 	1. **Пример:** `TASK-111`  => 
-   ```html
+```html
  <a href="https://tracker.yandex.ru/TASK-111"> TASK-111 </a>
-	```
+```
 6. boardlink - делает из текста ссылку HTML-элементом `<a/>` на ресурс доски Yandex Tracker-а.
 	1. **Пример:** `333`  => 
 ```html
  <a href="https://tracker.yandex.ru/pages/projects/333/board"> 333 </a>
 ```
-5. projectlink - делает из текста ссылку HTML-элементом `<a/>` на ресурс проекта Yandex Tracker-а.
+7. projectlink - делает из текста ссылку HTML-элементом `<a/>` на ресурс проекта Yandex Tracker-а.
 	1. **Пример:** `444`  => 
 ```html
  <a href="https://tracker.yandex.ru/pages/projects/444"> 444 </a>
 ```
-5. log - выводит в консоль содержимое.
-6. date - делает из текста в формате `DateTime` текст даты без времени
+8. log - выводит в консоль содержимое.
+9. date - делает из текста в формате `DateTime` текст даты без времени
 	1. **Пример:** `12.04.1961T09:07:00`  => `12.04.1961`
-7. time - делает из текста в формате `DateTime` текст времени без даты
+10. time - делает из текста в формате `DateTime` текст времени без даты
 	1. **Пример:** `19.08.1960T11:44:00`  => `11:44:00`
 
 
