@@ -1,6 +1,6 @@
 import { requestUrl, RequestUrlResponsePromise } from "obsidian"
 import { SettingsData } from "../Settings/Settings"
-import { API, FailResponse, isFailResponse } from './APIBase'
+import { API, FailResponse, isFailResponse, RequestMethods } from './APIBase'
 import ts from "typescript";
 
 
@@ -43,8 +43,9 @@ export class YTAPI {
     private async requestWrapper(
         resource_type: string,
         resource_id: string | null = null,
-        parameters: null = null,
-        skipRetry: boolean = false
+        skipRetry: boolean = false,
+        method: RequestMethods = "GET",
+        data: any = undefined
     ): Promise<Object> {
         const isResourceId: boolean = typeof resource_id === 'string' && resource_id.length > 0
         const isParameters: boolean = false
@@ -56,8 +57,7 @@ export class YTAPI {
 
         const headers = this.buildHeaders()
 
-        const response = await this.api.request(url, headers, skipRetry)
-
+        const response = await this.api.request(url, headers, method, data, skipRetry)
 
         if (isFailResponse(response)) {
             return { data: "Fail", response: response }
@@ -115,7 +115,7 @@ export class YTAPI {
     }
 
     public async requestTest() {
-        return await this.requestWrapper("myself", null, null, true)
+        return await this.requestWrapper("myself", null, true)
     }
 
     public async testReq() {
@@ -132,17 +132,14 @@ export class YTAPI {
         return await this.api.request(this.baseURL + "boards", {})
     }
 
-
-
     public async requestQuery(
         query: any,
         skipRetry: boolean = false
     ): Promise<Object> {
-        const query_url = "https://api.tracker.yandex.net/v3/issues/_search?expand=transitions"
-        const url: string = query_url
-
+        const url = "https://api.tracker.yandex.net/v3/issues/_search?expand=transitions"
         const headers = this.buildHeaders()
-        const response = await this.api.post(url, headers, JSON.stringify(query), skipRetry)
+
+        const response = await this.api.request(url, headers, "POST", query)
 
         if (isFailResponse(response)) {
             return { data: "Fail", response: response }
