@@ -71,15 +71,13 @@ export class YTISettings {
 
     private firstLaunchNotice() {
         new Notice(
-            `Видимо, вы запустили 'Yandex Tracker Issue' в первый раз.\n\nСпасибо за установку плагина.\n\nДля детальной информацией ознакомтесь с инструкцией.\n\nЕсли вы нашли ошибку - откройте, пожалуйста, Issue в github-е.`,
+            `Видимо, вы запустили 'Yandex Tracker Issue' в первый раз.\n\nСпасибо за установку плагина!!!\n\nДля детальной информации, ознакомтесь с инструкцией.\n\nЕсли вы нашли ошибку - откройте, пожалуйста, Issue в github-е.`,
             15000
         )
     }
 
     public async load() {
         let data = await this.plugin.loadData()
-        console.log("Data")
-        console.log(data)
 
         if (!isTypeOf(data, SettingsData)) {
             if (data !== null) {
