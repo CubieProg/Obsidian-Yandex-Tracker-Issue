@@ -227,7 +227,7 @@ export class YTISettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Сбросить настройки до стандартных')
-            .setDesc('Настройки отображения таблиц сбросятся до стандартных')
+            .setDesc('Настройки отображения сбросятся до стандартных')
             .addButton((component: ButtonComponent) =>
                 component
                     .setButtonText("Сбросить")
