@@ -30,7 +30,7 @@ export class Board implements IYaTrDTO {
 
     public static aliases: Object = {
         "self": "Адрес ресурса",
-        "id": "Hash-ID доски",
+        "id": "ID доски",
         "version": "Версия",
         "name": "Название доски",
         "filter": "Фильтр",

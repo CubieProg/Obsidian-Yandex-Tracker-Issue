@@ -146,4 +146,15 @@ export class YTClient implements TestableRequestProvider {
 
         new Notice(`Подключение работает.\n\nВы авторизовались как ${responseTest.display}.`)
     }
+
+
+    public async getQuery(
+        query: string,
+    ): Promise<Issue[]> {
+
+        // const response = await this.yTAPI.requestQuery({ "query": query })
+        // console.log(response)
+        
+        return (await this.yTAPI.requestQuery({ "query": query })) as Issue[]
+    }
 }

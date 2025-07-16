@@ -1,14 +1,12 @@
 import { WorkspaceLeaf, TFile, ViewState, addIcon, Plugin, Menu, MarkdownView } from 'obsidian';
 import { YTISettings } from './src/Settings/Settings';
 import { YTISettingsTab } from './src/Settings/SettingsTab';
-import { API } from './src/API/APIBase';
 import { YTClient } from './src/YTClient';
 import { MarkdownParser } from './src/MarkdownParser/MarkdownParser';
 
 class YTIPlugin extends Plugin {
 
     private settings: YTISettings;
-    private api: API;
     private YandexTrackerClient: YTClient
     private markdownParser: MarkdownParser
 
@@ -22,60 +20,30 @@ class YTIPlugin extends Plugin {
 
         this.markdownParser = new MarkdownParser(this.YandexTrackerClient, this, this.settings)
 
-
-        // this.registerMarkdownCodeBlockProcessor('yt-test', async (source, el, ctx) => {
-        //     this.YandexTrackerClient.testReq()
-        // })
-
-        // this.api = new API(this.settings.data)
-
-        // this.registerMarkdownCodeBlockProcessor('yt-issue', async (source, el, ctx) => {
-        //     const content = source.split('\n').map(async line => await this.api.requestIssue(line) + '\n')
-
-        //     const bar = await Promise.all(content);
-
-        //     const header = `
-        //         <tr>
-        //             <th scope="col">ID задачи</th>
-        //             <th scope="col">Название</th>
-        //             <th scope="col">Дата начала</th>
-        //             <th scope="col">Исполнитель</th>
-        //             <th scope="col">Статус</th>
-        //         </tr>
-        //     `
-
-        //     el.innerHTML = '<table>' + header + bar.join("\n") + '</table>'
-        // })
-
-        // this.registerMarkdownCodeBlockProcessor('yt-boards', async (source, el, ctx) => {
-        //     // await this.api.requestBoards()
+        this.registerEvents()
 
 
-        //     const content = source.split('\n').map(async line => await this.api.requestBoard(line) + '\n')
+        // console.log(await this.YandexTrackerClient.getQuery(`Resolution: empty() "Status Type": !cancelled "Status Type": !done Resolution: empty() "Sort by": Updated DESC`))
+    }
 
-        //     const bar = await Promise.all(content);
+    private rerender(full: boolean = false) {
+        this.markdownParser.rerender()
+        const activeView = this.app.workspace.getActiveViewOfType(MarkdownView)
+        try { activeView?.previewMode.rerender(full) } catch { }
+    }
 
-        //     const header = `
-        //         <tr>
-        //             <th scope="col">Название доски</th>
-        //             <th scope="col">Дата начала</th>
-        //             <th scope="col">Создатель</th>
-        //         </tr>
-        //     `
-
-        //     el.innerHTML = '<table>' + header + bar.join("\n") + '</table>'
-        // })
-
-
-        // this.registerMarkdownCodeBlockProcessor('yt-fields', async (source, el, ctx) => {
-
-        //     el.innerHTML = '<div>' + await this.api.requestFields() + '</div>'
-        // })
-
-        // this.registerMarkdownCodeBlockProcessor('yt-queues', async (source, el, ctx) => {
-
-        //     el.innerHTML = '<div>' + await this.api.requestQueues() + '</div>'
-        // })
+    private registerEvents() {
+        const eventsMap = new Map<string, Function>([
+            ["yandex-tracker-issue:rerender", async (data: any) => {
+                console.log("start rerender")
+                this.rerender()
+            }],
+        ])
+        eventsMap.forEach((callback, event_name) => {
+            this.registerEvent(this.app.vault.on(event_name, async (data: any = null) => {
+                await callback(data)
+            }));
+        })
     }
 }
 

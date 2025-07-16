@@ -40,3 +40,103 @@ body {
 .green-hihglight {
     box-shadow: 0 0 calc(var(--cell-size)*2) rgba(0, 255, 0, 0.5) inset;
 }
+
+
+.processor-gantt-margin-bottom {
+    height: 32px;
+}
+
+.gantt-wrapper {
+    position: relative;
+}
+
+.gant-margin-up {
+    height: 4px;
+    width: 100%;
+}
+
+.gant-margin-bottom {
+    height: 12px;
+    width: 100%;
+}
+
+.gantt-task-line {
+    width: 100%;
+    height: 24px;
+}
+
+
+.gantt-task-wrapper {
+    width: 100%;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.gantt-task-issue-link-div {
+    float: left;
+    width: 84px;
+    height: 24px;
+}
+
+.gantt-task-other-wrapper {
+    margin-left: 96px;
+}
+
+.gantt-task-element {
+    height: 24px;
+    border-radius: 8px;
+
+    text-align: center;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    background: rgb(75, 113, 214);
+}
+
+.gantt-task-text-wrapper {
+    margin-left: 8px;
+    margin-right: 8px;
+
+    text-align: center;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.gantt-navline-datenav {
+    pointer-events: none;
+    height: 100%;
+}
+
+.gantt-navline-line {
+    pointer-events: none;
+
+    height: 100%;
+    width: 0.5px;
+
+    border-left: 0.5px dashed currentColor;
+    opacity: 0.5;
+}
+
+.gantt-navline-text {
+    pointer-events: none;
+    font-size: 13px;
+    margin-left: -32px;
+
+    opacity: 0.85;
+    width: fit-content;
+
+    transform: rotate(0deg);
+}
+
+.gantt-navline-wrapper {
+    pointer-events: none;
+    position: absolute;
+    top: 0px;
+    left: 96px;
+    right: 0px;
+    height: 100%;
+}

@@ -45,6 +45,22 @@ export class ModifyerParser {
         "boardlink": {
             processor: this.boardlinkProcessor,
             check: this.equalCheck
+        },
+        "projectlink": {
+            processor: this.projectlinkProcessor,
+            check: this.equalCheck
+        },
+        "log": {
+            processor: this.logProcessor,
+            check: this.equalCheck
+        },
+        "date": {
+            processor: this.dateProcessor,
+            check: this.equalCheck
+        },
+        "time": {
+            processor: this.timeProcessor,
+            check: this.equalCheck
         }
     }
 
@@ -66,7 +82,7 @@ export class ModifyerParser {
     // Обработчики
 
     private initialsProcessor(data: string, modifyerKey: string = "") {
-        const tokens = data.split(" ")
+        const tokens = data.replace(/\s+/g, ' ').split(" ")
 
         return tokens.reduce((acc: string, curr: string, idx: number, array: string[]) => {
             if (idx >= array.length - 1) {
@@ -79,11 +95,9 @@ export class ModifyerParser {
     private trimProcessor(data: string, modifyerKey: string = "") {
         try {
             const trim_word_length = "trim".length
-
-            const subWord = modifyerKey.substring(trim_word_length, modifyerKey.length)
-            console.log("SubWord", subWord)
-
             const word_length = Number(modifyerKey.substring(trim_word_length, modifyerKey.length))
+
+            if (word_length >= data.length) { return data }
             return data.substring(0, word_length) + '...'
         } catch {
             return data
@@ -111,5 +125,33 @@ export class ModifyerParser {
         const anchor: HTMLAnchorElement = createEl('a', { href: 'https://tracker.yandex.ru/agile/board/' + data })
         anchor.innerHTML = data
         return anchor
+    }
+
+    private projectlinkProcessor(data: string, modifyerKey: string = "") {
+        const anchor: HTMLAnchorElement = createEl('a', { href: 'https://tracker.yandex.ru/pages/projects/' + data })
+        anchor.innerHTML = data
+        return anchor
+    }
+
+    private logProcessor(data: any, modifyerKey: string = "") {
+        console.log(data)
+        return data
+    }
+
+    private dateProcessor(data: string, modifyerKey: string = "") {
+        try {
+            const dateTime = new Date(data)
+            return dateTime.toLocaleDateString()
+
+        } catch { }
+        return data
+    }
+
+    private timeProcessor(data: string, modifyerKey: string = "") {
+        try {
+            const dateTime = new Date(data)
+            return dateTime.toLocaleTimeString()
+        } catch { }
+        return data
     }
 }

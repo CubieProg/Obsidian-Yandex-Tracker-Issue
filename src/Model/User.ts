@@ -36,12 +36,12 @@ export class User implements IYaTrDTO {
     public static aliases: Object = {
         // Base types
         "self": "Адрес ресурса",
-        "id": "Hash-ID пользователя",
+        "id": "ID пользователя",
         "login": "Логин",
         "cloudUid": "Cloud ID",
         "firstName": "Имя",
         "lastName": "Фамилия",
-        "display": "Имя",
+        "display": "Полное имя",
         "email": "email",
         "firstLoginDate": "Дата первого входа",
         "lastLoginDate": "Дата последнего входа",

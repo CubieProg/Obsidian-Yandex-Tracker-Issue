@@ -1,6 +1,7 @@
 import { Notice, Plugin } from 'obsidian';
 // import { YWISessionGlobalProvider } from "../../Model/YWIContext"
 import { isTypeOf } from '../utils';
+import { defaultSettings } from './defaultSettings';
 
 
 
@@ -42,11 +43,8 @@ export class DisplayAttribute {
 }
 
 export class SettingsData {
-    clientId: string = "";
-    clientSecret: string = "";
     orgId: string = "";
     oauth: string = "";
-
 
     issueAttrs: DisplayAttribute[] = []
     boardAttrs: DisplayAttribute[] = []
@@ -54,6 +52,8 @@ export class SettingsData {
     queueAttrs: DisplayAttribute[] = []
     sprintAttrs: DisplayAttribute[] = []
     userAttrs: DisplayAttribute[] = []
+
+    ganttTerminationStatuses: string[] = []
 }
 
 
@@ -77,38 +77,36 @@ export class YTISettings {
                 this.crushedDataNotice()
             }
 
-            await this.plugin.saveData(new SettingsData())
+            await this.plugin.saveData(defaultSettings)
             data = await this.plugin.loadData()
         }
 
-        
+
         data.issueAttrs = data.issueAttrs.map(item => new DisplayAttribute(item))
         data.boardAttrs = data.boardAttrs.map(item => new DisplayAttribute(item))
         data.projectAttrs = data.projectAttrs.map(item => new DisplayAttribute(item))
         data.queueAttrs = data.queueAttrs.map(item => new DisplayAttribute(item))
         data.sprintAttrs = data.sprintAttrs.map(item => new DisplayAttribute(item))
         data.userAttrs = data.userAttrs.map(item => new DisplayAttribute(item))
+
+        data.ganttTerminationStatuses = data.ganttTerminationStatuses
+
         this.data = data
 
-        // console.log(DisplayAttribute.parseFromString("lay1.lay2:initials:trim20:link"))
-        // console.log(DisplayAttribute.parseFromString("lay1:initials:trim20:link"))
-        // console.log(DisplayAttribute.parseFromString("lay1"))
-        // console.log(DisplayAttribute.parseFromString("lay1.lay2"))
+    }
+
+    public async dropToDefault() {
+        let newSettings = structuredClone(defaultSettings)
+        newSettings.oauth = this.data.oauth
+        newSettings.orgId = this.data.orgId
+
+        await this.plugin.saveData(newSettings)
+        await this.load()
     }
 
     public async save() {
         await this.plugin.saveData(this.data)
         this.plugin.app.vault.trigger("YTI:save-settings")
-    }
-
-    public async setClientId(clientId: string) {
-        this.data.clientId = clientId
-        await this.save()
-    }
-
-    public async setClientSecret(clientSecret: string) {
-        this.data.clientSecret = clientSecret
-        await this.save()
     }
 
     public async setOrgId(orgId: string) {

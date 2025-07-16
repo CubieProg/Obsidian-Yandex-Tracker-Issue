@@ -10,8 +10,6 @@ export class YTISettingsTab extends PluginSettingTab {
     private settings: YTISettings
     private tester: TestableRequestProvider;
 
-    private showClientId = new linkVariable(false)
-    private showClientSecret = new linkVariable(false)
     private showOAuth = new linkVariable(false)
     private showOrgId = new linkVariable(false)
 
@@ -40,8 +38,8 @@ export class YTISettingsTab extends PluginSettingTab {
                     .setTooltip(`Копировать ${name}`)
                     .setIcon("copy")
                     .onClick(async () => {
-                        if (this.settings.data.clientId) {
-                            await navigator.clipboard.writeText(this.settings.data.clientId);
+                        if (this.settings.data[settingsAttrName]) {
+                            await navigator.clipboard.writeText(this.settings.data[settingsAttrName]);
                             new Notice(`${name} помещён в буфер обмена`);
                         }
                     })
@@ -75,21 +73,6 @@ export class YTISettingsTab extends PluginSettingTab {
 
         containerEl.empty()
 
-        // this.addHiddenText(
-        //     containerEl,
-        //     "Client ID",
-        //     'Укажите ваш Client ID',
-        //     'clientId',
-        //     this.showClientId
-        // )
-
-        // this.addHiddenText(
-        //     containerEl,
-        //     "Client Secret",
-        //     'Укажите ваш Client Secret',
-        //     'clientSecret',
-        //     this.showClientSecret
-        // )
 
 
         const auth_header = createEl('h1')
@@ -143,6 +126,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.issueAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
                         await this.settings.save()
                     })
             });
@@ -158,6 +142,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.boardAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
                         await this.settings.save()
                     })
             });
@@ -173,6 +158,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.projectAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
                         await this.settings.save()
                     })
             });
@@ -188,6 +174,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.queueAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
                         await this.settings.save()
                     })
             });
@@ -203,6 +190,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.sprintAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
                         await this.settings.save()
                     })
             });
@@ -218,6 +206,21 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.userAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
+                        await this.settings.save()
+                    })
+            });
+
+        new Setting(containerEl)
+            .setName('Статусы завершённых задач')
+            .setDesc('Статусы завершённых задач для диаграммы Ганта')
+            .addText((text) => {
+                text
+                    .setValue(this.settings.data.ganttTerminationStatuses.join(" "))
+                    .onChange(async (value: string) => {
+                        this.settings.data.ganttTerminationStatuses = value
+                            .split(" ")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
                         await this.settings.save()
                     })
             });
@@ -230,6 +233,22 @@ export class YTISettingsTab extends PluginSettingTab {
                     .setButtonText("Сбросить")
                     .onClick(async (evt: MouseEvent) => {
                         new Notice("Настройки были сброшены")
+                        await this.settings.dropToDefault()
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
+                        this.hide()
+                        this.display()
+                    })
+            )
+
+        new Setting(containerEl)
+            .setName('Ререндер')
+            .setDesc('Когда данные с Yandex Tracker загрузились некорректно, используйте эту кнопку')
+            .addButton((component: ButtonComponent) =>
+                component
+                    .setButtonText("Ререндер")
+                    .onClick(async (evt: MouseEvent) => {
+                        new Notice("Запуск ререндера")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
                     })
             )
     }

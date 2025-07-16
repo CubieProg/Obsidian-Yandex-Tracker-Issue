@@ -132,4 +132,21 @@ export class YTAPI {
         return await this.api.request(this.baseURL + "boards", {})
     }
 
+
+
+    public async requestQuery(
+        query: any,
+        skipRetry: boolean = false
+    ): Promise<Object> {
+        const query_url = "https://api.tracker.yandex.net/v3/issues/_search?expand=transitions"
+        const url: string = query_url
+
+        const headers = this.buildHeaders()
+        const response = await this.api.post(url, headers, JSON.stringify(query), skipRetry)
+
+        if (isFailResponse(response)) {
+            return { data: "Fail", response: response }
+        }
+        return await response.json
+    }
 }

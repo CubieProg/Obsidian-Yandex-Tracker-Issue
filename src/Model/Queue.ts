@@ -36,7 +36,7 @@ export class Queue implements IYaTrDTO {
 
     public static aliases: Object = {
         "self": "Адрес ресурса",
-        "id": "Hash-ID очереди",
+        "id": "ID очереди",
         "key": "ID очереди",
         "name": "Название",
         "description": "Описание",

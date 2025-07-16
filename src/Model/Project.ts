@@ -14,6 +14,7 @@ export class Project implements IYaTrDTO {
     public id: number
     public version: number
 
+    public startDate: Date
     public endDate: Date
 
     public lead: User
@@ -37,6 +38,7 @@ export class Project implements IYaTrDTO {
         "version": "Версия",
 
         // TypeScript types
+        "startDate": "Дата начала",
         "endDate": "Дата окончания",
 
         // Model types
