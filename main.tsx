@@ -35,7 +35,6 @@ class YTIPlugin extends Plugin {
     private registerEvents() {
         const eventsMap = new Map<string, Function>([
             ["yandex-tracker-issue:rerender", async (data: any) => {
-                console.log("start rerender")
                 this.rerender()
             }],
         ])

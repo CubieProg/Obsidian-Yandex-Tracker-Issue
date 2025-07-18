@@ -35,7 +35,6 @@ export class MarkdownParser {
 
     public rerender() {
         for (let processor of this.postprocessors) {
-            console.log(processor)
             MarkdownPreviewRenderer.unregisterPostProcessor(processor)
             this.plugin.registerMarkdownPostProcessor(processor)
         }
