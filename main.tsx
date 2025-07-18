@@ -21,9 +21,6 @@ class YTIPlugin extends Plugin {
         this.markdownParser = new MarkdownParser(this.YandexTrackerClient, this, this.settings)
 
         this.registerEvents()
-
-
-        // console.log(await this.YandexTrackerClient.getQuery(`Resolution: empty() "Status Type": !cancelled "Status Type": !done Resolution: empty() "Sort by": Updated DESC`))
     }
 
     private rerender(full: boolean = false) {
