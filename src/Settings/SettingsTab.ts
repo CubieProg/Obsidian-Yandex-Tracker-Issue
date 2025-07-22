@@ -75,8 +75,7 @@ export class YTISettingsTab extends PluginSettingTab {
 
 
 
-        const auth_header = createEl('h1')
-        auth_header.innerHTML = "Авторизация."
+        const auth_header = createEl('h1', { text: "Авторизация." })
         containerEl.appendChild(auth_header)
 
         this.addHiddenText(
@@ -112,8 +111,7 @@ export class YTISettingsTab extends PluginSettingTab {
                     })
             )
 
-        const display_settings_header = createEl('h1')
-        display_settings_header.innerHTML = "Настройки отображения."
+        const display_settings_header = createEl('h1', { text: "Настройки отображения." })
         containerEl.appendChild(display_settings_header)
 
         new Setting(containerEl)

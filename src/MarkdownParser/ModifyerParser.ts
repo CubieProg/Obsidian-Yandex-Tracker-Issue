@@ -110,31 +110,39 @@ export class ModifyerParser {
     }
 
     private linkProcessor(data: string, modifyerKey: string = "") {
-        const anchor: HTMLAnchorElement = createEl('a', { href: data })
-        anchor.innerHTML = data
+        const anchor: HTMLAnchorElement = createEl('a', { 
+            href: data, 
+            text: data
+        })
         return anchor
     }
 
     private ytlinkProcessor(data: string, modifyerKey: string = "") {
-        const anchor: HTMLAnchorElement = createEl('a', { href: 'https://tracker.yandex.ru/' + data })
-        anchor.innerHTML = data
+        const anchor: HTMLAnchorElement = createEl('a', { 
+            href: 'https://tracker.yandex.ru/' + data, 
+            text: data
+        })
         return anchor
     }
 
     private boardlinkProcessor(data: string, modifyerKey: string = "") {
-        const anchor: HTMLAnchorElement = createEl('a', { href: 'https://tracker.yandex.ru/agile/board/' + data })
-        anchor.innerHTML = data
+        const anchor: HTMLAnchorElement = createEl('a', {
+            href: 'https://tracker.yandex.ru/agile/board/' + data,
+            text: data
+        })
         return anchor
     }
 
     private projectlinkProcessor(data: string, modifyerKey: string = "") {
-        const anchor: HTMLAnchorElement = createEl('a', { href: 'https://tracker.yandex.ru/pages/projects/' + data })
-        anchor.innerHTML = data
+        const anchor: HTMLAnchorElement = createEl('a', {
+            href: 'https://tracker.yandex.ru/pages/projects/' + data,
+            text: data
+        })
         return anchor
     }
 
     private logProcessor(data: any, modifyerKey: string = "") {
-        console.log(data)
+        // console.log(data)
         return data
     }
 

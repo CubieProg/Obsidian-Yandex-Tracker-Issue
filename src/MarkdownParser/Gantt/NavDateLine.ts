@@ -10,12 +10,14 @@ export const navDateLine = (date: Date, offset: number) => {
 
     const line = createDiv({ attr: { class: "gantt-navline-line" } })
 
-    const dateText = createDiv({ attr: { class: "gantt-navline-text" } })
+    const dateText = createDiv({ 
+        attr: { class: "gantt-navline-text" }, 
+        text: date.toLocaleDateString()
+    })
 
     const wrapper = createDiv({ attr: { class: "gantt-navline-wrapper" } })
 
 
-    dateText.innerHTML = date.toLocaleDateString()
 
     dateNav.appendChild(line)
     dateNav.appendChild(dateText)

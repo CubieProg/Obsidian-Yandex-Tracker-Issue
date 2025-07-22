@@ -23,6 +23,10 @@ class YTIPlugin extends Plugin {
         this.registerEvents()
     }
 
+    async onunload() {
+        this.markdownParser.unregisterProcessors()
+    }
+
     private rerender(full: boolean = false) {
         this.markdownParser.rerender()
         const activeView = this.app.workspace.getActiveViewOfType(MarkdownView)

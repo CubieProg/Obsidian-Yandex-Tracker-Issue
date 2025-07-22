@@ -29,8 +29,14 @@ export class MarkdownParser {
 
         this.postprocessors = new Array<MarkdownPostProcessor>();
         this.modifyerParser = new ModifyerParser()
-        
+
         this.registerProcessors()
+    }
+
+    public unregisterProcessors() {
+        for (let processor of this.postprocessors) {
+            MarkdownPreviewRenderer.unregisterPostProcessor(processor)
+        }
     }
 
     public rerender() {
@@ -58,7 +64,7 @@ export class MarkdownParser {
     }
 
     private registerProcessors() {
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-issue', async (source, el, ctx) => {
+        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-issue', (source, el, ctx) => {
             this.entityProcessor(source, el, ctx, Issue, false)
         }))
         this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-boards', async (source, el, ctx) => {
@@ -137,8 +143,11 @@ export class MarkdownParser {
 
         const table = createEl('table')
 
-        const caption = createEl('caption', { attr: { text: "test caption" }, parent: table })
-        caption.innerHTML = className
+        const caption = createEl('caption', {
+            attr: { text: "test caption" },
+            parent: table,
+            text: className
+        })
         table.appendChild(caption)
 
         const head = createEl('thead', { parent: table })
@@ -152,12 +161,17 @@ export class MarkdownParser {
         el.appendChild(table)
 
         display_attrs.forEach((item: DisplayAttribute) => {
-            const column = createEl('th', { attr: { text: entityClass.aliases[item.firstLayer] }, parent: head_line })
-            column.innerHTML = entityClass.aliases[item.firstLayer]
+            let column_name = entityClass.aliases[item.firstLayer]
 
             if (item.secondLayer && entityClass.complexFiedls.hasOwnProperty(item.firstLayer)) {
-                column.innerHTML += `.${entityClass.complexFiedls[item.firstLayer].DTOType.aliases[item.secondLayer]}`
+                column_name += `.${entityClass.complexFiedls[item.firstLayer].DTOType.aliases[item.secondLayer]}`
             }
+
+            const column = createEl('th', {
+                attr: { text: entityClass.aliases[item.firstLayer] },
+                parent: head_line,
+                text: column_name
+            })
 
             head_line.appendChild(column)
         })
@@ -181,12 +195,14 @@ export class MarkdownParser {
                     display_data = this.generateNoDataText()
                 }
 
-                const column = createEl('td', { attr: { text: display_data }, parent: entity_line })
+                const column = createEl('td', {
+                    attr: { text: display_data },
+                    parent: entity_line,
+                    text: typeof (display_data) === 'string' ? display_data : ""
+                })
 
                 if (display_data instanceof HTMLElement) {
                     column.appendChild(display_data)
-                } else {
-                    column.innerHTML = display_data
                 }
 
                 entity_line.appendChild(column)

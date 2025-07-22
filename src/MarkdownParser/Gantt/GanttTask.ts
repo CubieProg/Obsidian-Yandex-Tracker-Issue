@@ -1,5 +1,6 @@
 import { setTooltip } from "obsidian"
 import { Issue } from "../../Model/Issue"
+import { text } from "stream/consumers"
 
 export class GanttTask {
     private issue: Issue
@@ -40,9 +41,11 @@ export class GanttTask {
 
         const wrapper = createDiv({ attr: { class: `gantt-task-wrapper` } })
         const issueLink = createDiv({ attr: { class: `gantt-task-issue-link-div` } })
-        const issueAnchor = createEl('a', { href: `https://tracker.yandex.ru/${this.taskId}` })
+        const issueAnchor = createEl('a', {
+            href: `https://tracker.yandex.ru/${this.taskId}`,
+            text: this.taskId
+        })
 
-        issueAnchor.innerHTML = this.taskId
         issueLink.appendChild(issueAnchor)
 
         const ganttWrapper = createDiv({ attr: { class: `gantt-task-other-wrapper` } })
@@ -57,9 +60,13 @@ export class GanttTask {
             }
         })
 
-        const textWrapper = createDiv({ attr: { class: "gantt-task-text-wrapper" } })
 
-        textWrapper.innerHTML = this.name
+
+        const textWrapper = createEl('div', {
+            attr: { class: "gantt-task-text-wrapper" },
+            text: this.name
+        })
+
         setTooltip(textWrapper, this.generateTooltipText())
 
         ganttElement.appendChild(textWrapper)
