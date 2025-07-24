@@ -5,7 +5,7 @@
 	"minAppVersion": "1.0.0",
 	"description": "Display Yandex Tracker issues in your notes",
 	"author": "Pavel Sokolov",
-	"authorUrl": "",
+	"authorUrl": "https://github.com/CubieProg",
 	"helpUrl": "",
 	"isDesktopOnly": false
 }
