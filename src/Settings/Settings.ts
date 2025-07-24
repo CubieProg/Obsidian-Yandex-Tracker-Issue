@@ -4,18 +4,46 @@ import { isTypeOf } from '../utils';
 import { defaultSettings } from './defaultSettings';
 
 
+export class Modifyer {
+    public modifyerName: string
+    public args: string[]
+
+    constructor(data: any | undefined = undefined) {
+        if (data === undefined) { return }
+        this.modifyerName = data.modifyerName
+        this.args = data.args
+    }
+
+    public static parseFromString(data: string): Modifyer {
+        const result = new Modifyer()
+        const tokens: string[] = data.split("_")
+
+        if (tokens.length <= 0) { return result }
+
+        result.modifyerName = tokens.shift() as string
+        result.args = tokens
+        return result
+    }
+
+    public convertToString(): string {
+        return this.modifyerName + (this.args.length > 0 ? "_" + this.args.join("_") : "")
+    }
+}
 
 export class DisplayAttribute {
     public firstLayer: string;
     public secondLayer: string | undefined;
-    public modifyers: string[];
+    public modifyers: Modifyer[];
 
     constructor(data: any | undefined = undefined) {
         if (data === undefined) { return }
         this.firstLayer = data.firstLayer
-        this.modifyers = data.modifyers
+
+        this.modifyers = data.modifyers.map(item => new Modifyer(item))
         this.secondLayer = data.secondLayer
     }
+
+
 
     public static parseFromString(data: string): DisplayAttribute {
         const result = new DisplayAttribute()
@@ -28,7 +56,7 @@ export class DisplayAttribute {
         if (layers.length >= 1) { result.firstLayer = layers[0] }
         if (layers.length >= 2) { result.secondLayer = layers[1] }
 
-        result.modifyers = tokens
+        result.modifyers = tokens.map(token => Modifyer.parseFromString(token))
 
         return result
     }
@@ -36,7 +64,9 @@ export class DisplayAttribute {
     public convertToString(): string {
         let res: string = this.firstLayer
         if (this.secondLayer) { res += `.${this.secondLayer}` }
-        if (this.modifyers.length > 0) { res += ":" + this.modifyers.join(":") }
+        if (this.modifyers.length > 0) {
+            res += ":" + this.modifyers.map(item => item.convertToString()).join(":")
+        } // do something smarter pls
 
         return res
     }
@@ -101,7 +131,6 @@ export class YTISettings {
         data.ganttTerminationStatuses = data.ganttTerminationStatuses
 
         this.data = data
-
     }
 
     public async dropToDefault() {

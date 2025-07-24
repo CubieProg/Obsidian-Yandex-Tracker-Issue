@@ -3,11 +3,11 @@ import { DisplayAttribute } from "../Settings/Settings"
 
 export class ModifyerParser {
     public process(data: any, displayAttribute: DisplayAttribute) {
-        displayAttribute.modifyers.forEach(value => {
-            const modifyer = this.findModifyer(value)
+        displayAttribute.modifyers.forEach(mod => {
+            const modifyer = this.findModifyer(mod.modifyerName)
 
             if (modifyer) {
-                data = this.modifyers[modifyer].processor(data, value)
+                data = this.modifyers[modifyer](data, mod.args)
             }
         })
 
@@ -17,51 +17,21 @@ export class ModifyerParser {
 
     private findModifyer(modifyer: string): string | undefined {
         for (let key in this.modifyers) {
-            if (this.modifyers[key].check(key, modifyer)) { return key }
+            if (key === modifyer) { return key }
         }
     }
 
     private readonly modifyers: object = {
-        "initials": {
-            processor: this.initialsProcessor,
-            check: this.equalCheck
-        },
-        "trim": {
-            processor: this.trimProcessor,
-            check: this.startsWithCheck
-        },
-        "yesno": {
-            processor: this.yesnoProcessor,
-            check: this.equalCheck
-        },
-        "link": {
-            processor: this.linkProcessor,
-            check: this.equalCheck
-        },
-        "ytlink": {
-            processor: this.ytlinkProcessor,
-            check: this.equalCheck
-        },
-        "boardlink": {
-            processor: this.boardlinkProcessor,
-            check: this.equalCheck
-        },
-        "projectlink": {
-            processor: this.projectlinkProcessor,
-            check: this.equalCheck
-        },
-        "log": {
-            processor: this.logProcessor,
-            check: this.equalCheck
-        },
-        "date": {
-            processor: this.dateProcessor,
-            check: this.equalCheck
-        },
-        "time": {
-            processor: this.timeProcessor,
-            check: this.equalCheck
-        }
+        "initials": this.initialsProcessor,
+        "trim": this.trimProcessor,
+        "yesno": this.yesnoProcessor,
+        "link": this.linkProcessor,
+        "ytlink": this.ytlinkProcessor,
+        "boardlink": this.boardlinkProcessor,
+        "projectlink": this.projectlinkProcessor,
+        "log": this.logProcessor,
+        "date": this.dateProcessor,
+        "time": this.timeProcessor,
     }
 
 
@@ -81,7 +51,7 @@ export class ModifyerParser {
 
     // Обработчики
 
-    private initialsProcessor(data: string, modifyerKey: string = "") {
+    private initialsProcessor(data: string, ...args: string[]) {
         const tokens = data.replace(/\s+/g, ' ').split(" ")
 
         return tokens.reduce((acc: string, curr: string, idx: number, array: string[]) => {
@@ -92,10 +62,10 @@ export class ModifyerParser {
         }, "")
     }
 
-    private trimProcessor(data: string, modifyerKey: string = "") {
+    private trimProcessor(data: string, ...args: string[]) {
         try {
             const trim_word_length = "trim".length
-            const word_length = Number(modifyerKey.substring(trim_word_length, modifyerKey.length))
+            const word_length = Number(args[0]) //Number(modifyerKey.substring(trim_word_length, modifyerKey.length))
 
             if (word_length >= data.length) { return data }
             return data.substring(0, word_length) + '...'
@@ -104,28 +74,28 @@ export class ModifyerParser {
         }
     }
 
-    private yesnoProcessor(data: any, modifyerKey: string = "") {
+    private yesnoProcessor(data: any, ...args: string[]) {
         if (data) { return "Да" }
         return "Нет"
     }
 
-    private linkProcessor(data: string, modifyerKey: string = "") {
-        const anchor: HTMLAnchorElement = createEl('a', { 
-            href: data, 
+    private linkProcessor(data: string, ...args: string[]) {
+        const anchor: HTMLAnchorElement = createEl('a', {
+            href: data,
             text: data
         })
         return anchor
     }
 
-    private ytlinkProcessor(data: string, modifyerKey: string = "") {
-        const anchor: HTMLAnchorElement = createEl('a', { 
-            href: 'https://tracker.yandex.ru/' + data, 
+    private ytlinkProcessor(data: string, ...args: string[]) {
+        const anchor: HTMLAnchorElement = createEl('a', {
+            href: 'https://tracker.yandex.ru/' + data,
             text: data
         })
         return anchor
     }
 
-    private boardlinkProcessor(data: string, modifyerKey: string = "") {
+    private boardlinkProcessor(data: string, ...args: string[]) {
         const anchor: HTMLAnchorElement = createEl('a', {
             href: 'https://tracker.yandex.ru/agile/board/' + data,
             text: data
@@ -133,7 +103,7 @@ export class ModifyerParser {
         return anchor
     }
 
-    private projectlinkProcessor(data: string, modifyerKey: string = "") {
+    private projectlinkProcessor(data: string, ...args: string[]) {
         const anchor: HTMLAnchorElement = createEl('a', {
             href: 'https://tracker.yandex.ru/pages/projects/' + data,
             text: data
@@ -141,12 +111,12 @@ export class ModifyerParser {
         return anchor
     }
 
-    private logProcessor(data: any, modifyerKey: string = "") {
+    private logProcessor(data: any, ...args: string[]) {
         // console.log(data)
         return data
     }
 
-    private dateProcessor(data: string, modifyerKey: string = "") {
+    private dateProcessor(data: string, ...args: string[]) {
         try {
             const dateTime = new Date(data)
             return dateTime.toLocaleDateString()
@@ -155,7 +125,7 @@ export class ModifyerParser {
         return data
     }
 
-    private timeProcessor(data: string, modifyerKey: string = "") {
+    private timeProcessor(data: string, ...args: string[]) {
         try {
             const dateTime = new Date(data)
             return dateTime.toLocaleTimeString()

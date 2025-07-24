@@ -1,15 +1,15 @@
 import { MarkdownPostProcessor, MarkdownPostProcessorContext, MarkdownPreviewRenderer, Plugin } from 'obsidian';
-import { DisplayAttribute, YTISettings } from '../Settings/Settings';
-import { YTClient } from '../YTClient';
-import { Issue } from '../Model/Issue';
-import { Board } from '../Model/Board';
-import { Queue } from '../Model/Queue';
-import { Project } from '../Model/Project';
-import { Sprint } from '../Model/Sprint';
-import { User } from '../Model/User';
-import { IYaTrDTO } from '../Model/UtilTypes/IYaTrDTO';
-import { ModifyerParser } from './ModifyerParser';
-import { Gantt } from './Gantt/Gantt';
+import { DisplayAttribute, YTISettings } from '../Settings/Settings.ts';
+import { YTClient } from '../YTClient.ts';
+import { Issue } from '../Model/Issue.ts';
+import { Board } from '../Model/Board.ts';
+import { Queue } from '../Model/Queue.ts';
+import { Project } from '../Model/Project.ts';
+import { Sprint } from '../Model/Sprint.ts';
+import { User } from '../Model/User.ts';
+import { IYaTrDTO } from '../Model/UtilTypes/IYaTrDTO.ts';
+import { ModifyerParser } from './ModifyerParser.ts';
+import { Gantt } from './Gantt/Gantt.ts';
 import { GanttTask } from './Gantt/GanttTask.ts';
 
 

@@ -1,23 +1,38 @@
 export const defaultSettings = {
     "orgId": "",
-    "oauth": "",
-    "issueAttrs": [
+    "oauth": "", "issueAttrs": [
+        {
+            "firstLayer": "assignee",
+            "secondLayer": "login",
+            "modifyers": []
+        },
         {
             "firstLayer": "key",
             "modifyers": [
-                "ytlink"
+                {
+                    "modifyerName": "ytlink",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "queue",
             "modifyers": [
-                "ytlink"
+                {
+                    "modifyerName": "ytlink",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "summary",
             "modifyers": [
-                "trim25"
+                {
+                    "modifyerName": "trim",
+                    "args": [
+                        "25"
+                    ]
+                }
             ]
         },
         {
@@ -27,13 +42,19 @@ export const defaultSettings = {
         {
             "firstLayer": "assignee",
             "modifyers": [
-                "initials"
+                {
+                    "modifyerName": "initials",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "createdAt",
             "modifyers": [
-                "date"
+                {
+                    "modifyerName": "date",
+                    "args": []
+                }
             ]
         },
         {
@@ -49,13 +70,21 @@ export const defaultSettings = {
         {
             "firstLayer": "id",
             "modifyers": [
-                "boardlink"
+                {
+                    "modifyerName": "boardlink",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "name",
             "modifyers": [
-                "trim25"
+                {
+                    "modifyerName": "trim",
+                    "args": [
+                        "25"
+                    ]
+                }
             ]
         },
         {
@@ -79,7 +108,10 @@ export const defaultSettings = {
         {
             "firstLayer": "id",
             "modifyers": [
-                "projectlink"
+                {
+                    "modifyerName": "projectlink",
+                    "args": []
+                }
             ]
         },
         {
@@ -89,7 +121,10 @@ export const defaultSettings = {
         {
             "firstLayer": "lead",
             "modifyers": [
-                "initials"
+                {
+                    "modifyerName": "initials",
+                    "args": []
+                }
             ]
         },
         {
@@ -103,17 +138,16 @@ export const defaultSettings = {
         {
             "firstLayer": "endDate",
             "modifyers": []
-        },
-        {
-            "firstLayer": "",
-            "modifyers": []
         }
     ],
     "queueAttrs": [
         {
             "firstLayer": "key",
             "modifyers": [
-                "ytlink"
+                {
+                    "modifyerName": "ytlink",
+                    "args": []
+                }
             ]
         },
         {
@@ -123,7 +157,12 @@ export const defaultSettings = {
         {
             "firstLayer": "description",
             "modifyers": [
-                "trim25"
+                {
+                    "modifyerName": "trim",
+                    "args": [
+                        "25"
+                    ]
+                }
             ]
         },
         {
@@ -137,7 +176,10 @@ export const defaultSettings = {
         {
             "firstLayer": "lead",
             "modifyers": [
-                "initials"
+                {
+                    "modifyerName": "initials",
+                    "args": []
+                }
             ]
         },
         {
@@ -161,37 +203,55 @@ export const defaultSettings = {
         {
             "firstLayer": "archived",
             "modifyers": [
-                "yesno"
+                {
+                    "modifyerName": "yesno",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "startDate",
             "modifyers": [
-                "date"
+                {
+                    "modifyerName": "date",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "endDate",
             "modifyers": [
-                "date"
+                {
+                    "modifyerName": "date",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "createdAt",
             "modifyers": [
-                "date"
+                {
+                    "modifyerName": "date",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "createdBy",
             "modifyers": [
-                "initials"
+                {
+                    "modifyerName": "initials",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "board",
             "modifyers": [
-                "boardlink"
+                {
+                    "modifyerName": "boardlink",
+                    "args": []
+                }
             ],
             "secondLayer": "id"
         },
@@ -204,7 +264,10 @@ export const defaultSettings = {
         {
             "firstLayer": "display",
             "modifyers": [
-                "initials"
+                {
+                    "modifyerName": "initials",
+                    "args": []
+                }
             ]
         },
         {
@@ -214,13 +277,19 @@ export const defaultSettings = {
         {
             "firstLayer": "firstLoginDate",
             "modifyers": [
-                "date"
+                {
+                    "modifyerName": "date",
+                    "args": []
+                }
             ]
         },
         {
             "firstLayer": "lastLoginDate",
             "modifyers": [
-                "time"
+                {
+                    "modifyerName": "time",
+                    "args": []
+                }
             ]
         }
     ],
