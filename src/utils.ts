@@ -45,3 +45,7 @@ export function isTypeOfObj<T>(jsonObject: Object, instanceType: Object): boolea
         return false;
     }
 };
+
+export const leftPartial = (func: Function, ...args: any[]) => (...rest: any[]) => func(...args, ...rest);
+export const rightPartial = (func: Function, ...args: any[]) => (...rest: any[]) => func(...rest, ...args);
+

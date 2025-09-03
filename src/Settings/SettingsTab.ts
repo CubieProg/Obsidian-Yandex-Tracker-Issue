@@ -128,7 +128,8 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.issueAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
-                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender-yt-issue")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender-yt-issue-query")
                         await this.settings.save()
                     })
             });
@@ -144,7 +145,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.boardAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
-                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender-yt-boards")
                         await this.settings.save()
                     })
             });
@@ -160,7 +161,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.projectAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
-                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender-yt-projects")
                         await this.settings.save()
                     })
             });
@@ -176,7 +177,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.queueAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
-                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender-yt-queues")
                         await this.settings.save()
                     })
             });
@@ -192,7 +193,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.sprintAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
-                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender-yt-sprints")
                         await this.settings.save()
                     })
             });
@@ -208,7 +209,7 @@ export class YTISettingsTab extends PluginSettingTab {
                         this.settings.data.userAttrs = value
                             .split(" ")
                             .map(token => DisplayAttribute.parseFromString(token))
-                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender-yt-users")
                         await this.settings.save()
                     })
             });
@@ -222,7 +223,8 @@ export class YTISettingsTab extends PluginSettingTab {
                     .onChange(async (value: string) => {
                         this.settings.data.ganttTerminationStatuses = value
                             .split(" ")
-                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender-yt-gantt")
+                        this.plugin.app.vault.trigger("yandex-tracker-issue:rerender-yt-gantt-query")
                         await this.settings.save()
                     })
             });

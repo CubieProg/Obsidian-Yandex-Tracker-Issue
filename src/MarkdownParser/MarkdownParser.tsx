@@ -12,38 +12,29 @@ import { ModifyerParser } from './ModifyerParser.ts';
 import { Gantt } from './Gantt/Gantt.ts';
 import { GanttTask } from './Gantt/GanttTask.ts';
 
-
+import { YTIMarkdownRenderer } from './MarkdownRenderer.ts';
+import YTIPlugin from "../../main.tsx";
+import { rightPartial } from "../utils";
 
 export class MarkdownParser {
     private yTClient: YTClient;
-    private plugin: Plugin;
+    private plugin: YTIPlugin;
     private settings: YTISettings;
     private modifyerParser: ModifyerParser;
 
     private postprocessors: MarkdownPostProcessor[];
+    private yTIpostprocessors: Array<MarkdownPostProcessor>;
 
-    constructor(yTClient: YTClient, plugin: Plugin, settings: YTISettings) {
+    constructor(yTClient: YTClient, plugin: YTIPlugin, settings: YTISettings) {
         this.yTClient = yTClient
         this.plugin = plugin
         this.settings = settings
 
         this.postprocessors = new Array<MarkdownPostProcessor>();
+        this.yTIpostprocessors = new Array<MarkdownPostProcessor>();
         this.modifyerParser = new ModifyerParser()
 
         this.registerProcessors()
-    }
-
-    public unregisterProcessors() {
-        for (let processor of this.postprocessors) {
-            MarkdownPreviewRenderer.unregisterPostProcessor(processor)
-        }
-    }
-
-    public rerender() {
-        for (let processor of this.postprocessors) {
-            MarkdownPreviewRenderer.unregisterPostProcessor(processor)
-            this.plugin.registerMarkdownPostProcessor(processor)
-        }
     }
 
     private extract(entity: Object, entityType: any, displayAttribute: DisplayAttribute) {
@@ -63,34 +54,61 @@ export class MarkdownParser {
         }
     }
 
+    private registerYTIProcessor(language: string, processorCallback: Function) {
+        
+        this.plugin.registerMarkdownCodeBlockProcessor(
+            language,
+            async (source, el, ctx) => {
+                ctx.addChild(
+                    new YTIMarkdownRenderer(
+                        this.plugin, language, source, el, ctx,
+                        (src: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
+                            processorCallback(src, el, ctx)
+                        },
+                    )
+                );
+            }
+        )
+    }
+
     private registerProcessors() {
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-issue', (source, el, ctx) => {
-            this.entityProcessor(source, el, ctx, Issue, false)
-        }))
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-boards', async (source, el, ctx) => {
-            this.entityProcessor(source, el, ctx, Board, false)
-        }))
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-queues', async (source, el, ctx) => {
-            this.entityProcessor(source, el, ctx, Queue, false)
-        }))
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-projects', async (source, el, ctx) => {
-            this.entityProcessor(source, el, ctx, Project, false)
-        }))
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-sprints', async (source, el, ctx) => {
-            this.entityProcessor(source, el, ctx, Sprint, false)
-        }))
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-users', async (source, el, ctx) => {
-            this.entityProcessor(source, el, ctx, User, false)
-        }))
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-gantt', async (source, el, ctx) => {
-            this.ganttProcessor(source, el, ctx, false)
-        }))
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-issue-query', async (source, el, ctx) => {
-            this.entityProcessor(source, el, ctx, Issue, true)
-        }))
-        this.postprocessors.push(this.plugin.registerMarkdownCodeBlockProcessor('yt-gantt-query', async (source, el, ctx) => {
-            this.ganttProcessor(source, el, ctx, true)
-        }))
+        this.registerYTIProcessor(
+            'yt-issue', 
+            rightPartial(this.entityProcessor.bind(this), Issue, false)
+        );
+        this.registerYTIProcessor(
+            'yt-boards', 
+            rightPartial(this.entityProcessor.bind(this), Board, false)
+        );
+        this.registerYTIProcessor(
+            'yt-queues', 
+            rightPartial(this.entityProcessor.bind(this), Queue, false)
+        );
+        this.registerYTIProcessor(
+            'yt-projects', 
+            rightPartial(this.entityProcessor.bind(this), Project, false)
+        );
+        this.registerYTIProcessor(
+            'yt-sprints', 
+            rightPartial(this.entityProcessor.bind(this), Sprint, false)
+        );
+        this.registerYTIProcessor(
+            'yt-users', 
+            rightPartial(this.entityProcessor.bind(this), User, false)
+        );
+        this.registerYTIProcessor(
+            'yt-issue-query', 
+            rightPartial(this.entityProcessor.bind(this), Issue, true)
+        );
+        
+        this.registerYTIProcessor(
+            'yt-gantt', 
+            rightPartial(this.ganttProcessor.bind(this), false)
+        );
+        this.registerYTIProcessor(
+            'yt-gantt-query', 
+            rightPartial(this.ganttProcessor.bind(this), Issue, true)
+        );
     }
 
     private processNonImplementedEntities(entity: any): string | undefined {

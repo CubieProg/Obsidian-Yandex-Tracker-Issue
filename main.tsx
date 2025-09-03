@@ -4,7 +4,7 @@ import { YTISettingsTab } from './src/Settings/SettingsTab';
 import { YTClient } from './src/YTClient';
 import { MarkdownParser } from './src/MarkdownParser/MarkdownParser';
 
-class YTIPlugin extends Plugin {
+export default class YTIPlugin extends Plugin {
 
     private settings: YTISettings;
     private YandexTrackerClient: YTClient
@@ -19,32 +19,11 @@ class YTIPlugin extends Plugin {
         this.addSettingTab(new YTISettingsTab(this, this.settings, this.YandexTrackerClient))
 
         this.markdownParser = new MarkdownParser(this.YandexTrackerClient, this, this.settings)
-
-        this.registerEvents()
     }
 
     async onunload() {
-        this.markdownParser.unregisterProcessors()
-    }
-
-    private rerender(full: boolean = false) {
-        this.markdownParser.rerender()
-        const activeView = this.app.workspace.getActiveViewOfType(MarkdownView)
-        try { activeView?.previewMode.rerender(full) } catch { }
-    }
-
-    private registerEvents() {
-        const eventsMap = new Map<string, Function>([
-            ["yandex-tracker-issue:rerender", async (data: any) => {
-                this.rerender()
-            }],
-        ])
-        eventsMap.forEach((callback, event_name) => {
-            this.registerEvent(this.app.vault.on(event_name, async (data: any = null) => {
-                await callback(data)
-            }));
-        })
+        // this.markdownParser.unregisterProcessors()
     }
 }
 
-module.exports = YTIPlugin
+// module.exports = YTIPlugin

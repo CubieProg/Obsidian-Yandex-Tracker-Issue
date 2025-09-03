@@ -28,6 +28,8 @@ not a main.js
 trash/
 src/python test
 
+obsidian.d.ts
+
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
