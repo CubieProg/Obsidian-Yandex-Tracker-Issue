@@ -144,7 +144,6 @@ export class MarkdownParser {
         const table = createEl('table')
 
         const caption = createEl('caption', {
-            attr: { text: "test caption" },
             parent: table,
             text: className
         })

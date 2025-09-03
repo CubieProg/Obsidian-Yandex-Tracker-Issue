@@ -74,9 +74,10 @@ export class YTISettingsTab extends PluginSettingTab {
         containerEl.empty()
 
 
+        new Setting(containerEl).setName('Авторизация.').setHeading();
 
-        const auth_header = createEl('h1', { text: "Авторизация." })
-        containerEl.appendChild(auth_header)
+        // const auth_header = createEl('h1', { text: "Авторизация." })
+        // containerEl.appendChild(auth_header)
 
         this.addHiddenText(
             containerEl,
@@ -111,8 +112,11 @@ export class YTISettingsTab extends PluginSettingTab {
                     })
             )
 
-        const display_settings_header = createEl('h1', { text: "Настройки отображения." })
-        containerEl.appendChild(display_settings_header)
+            
+        new Setting(containerEl).setName('Настройки отображения.').setHeading();
+        
+        // const display_settings_header = createEl('h1', { text: "Настройки отображения." })
+        // containerEl.appendChild(display_settings_header)
 
         new Setting(containerEl)
             .setName('Атрибуты задач')
