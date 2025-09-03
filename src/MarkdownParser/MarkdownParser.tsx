@@ -240,7 +240,7 @@ export class MarkdownParser {
         }
 
         const gantt = new Gantt(tasks);
-        const marginGantt = createDiv({ attr: { class: "processor-gantt-margin-bottom" } })
+        const marginGantt = createDiv({ attr: { class: "yti-processor-gantt-margin-bottom" } })
 
         el.appendChild(gantt.getElement())
         el.appendChild(marginGantt)

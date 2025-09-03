@@ -1,88 +1,47 @@
 body {
-    --cell-size: 50px;
+    --yti-cell-size: 50px;
 }
 
-.board {
-    margin: 20px 0px 20px 0px;
-}
-
-.row {
-    display: flex;
-    flex-direction: row;
-}
-
-.square {
-    width: var(--cell-size);
-    height: var(--cell-size);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(var(--cell-size) * 0.85);
-    font-family: serif;
-}
-
-.white {
-    background-color: color(srgb 0.944 0.944 0.944);
-}
-
-.black {
-    background-color: color(srgb 0.81333 0.81333 0.81333);
-}
-
-.red-hihglight {
-    box-shadow: 0 0 calc(var(--cell-size)*2) rgba(255, 0, 0, 0.75) inset;
-}
-
-.blue-hihglight {
-    box-shadow: 0 0 calc(var(--cell-size)*2) rgba(0, 0, 255, 0.4) inset;
-}
-
-.green-hihglight {
-    box-shadow: 0 0 calc(var(--cell-size)*2) rgba(0, 255, 0, 0.5) inset;
-}
-
-
-.processor-gantt-margin-bottom {
+.yti-processor-gantt-margin-bottom {
     height: 32px;
 }
 
-.gantt-wrapper {
+.yti-gantt-wrapper {
     position: relative;
 }
 
-.gant-margin-up {
+.yti-gant-margin-up {
     height: 4px;
     width: 100%;
 }
 
-.gant-margin-bottom {
+.yti-gant-margin-bottom {
     height: 12px;
     width: 100%;
 }
 
-.gantt-task-line {
+.yti-gantt-task-line {
     width: 100%;
     height: 24px;
 }
 
-
-.gantt-task-wrapper {
+.yti-gantt-task-wrapper {
     width: 100%;
     margin-top: 2px;
     margin-bottom: 2px;
 }
 
-.gantt-task-issue-link-div {
+.yti-gantt-task-issue-link-div {
     float: left;
     width: 84px;
     height: 24px;
 }
 
-.gantt-task-other-wrapper {
+.yti-gantt-task-other-wrapper {
     margin-left: 96px;
 }
 
-.gantt-task-element {
+.yti-gantt-task-element {
     height: 24px;
     border-radius: 8px;
 
@@ -95,7 +54,7 @@ body {
     background: rgb(75, 113, 214);
 }
 
-.gantt-task-text-wrapper {
+.yti-gantt-task-text-wrapper {
     margin-left: 8px;
     margin-right: 8px;
 
@@ -106,12 +65,12 @@ body {
     text-overflow: ellipsis;
 }
 
-.gantt-navline-datenav {
+.yti-gantt-navline-datenav {
     pointer-events: none;
     height: 100%;
 }
 
-.gantt-navline-line {
+.yti-gantt-navline-line {
     pointer-events: none;
 
     height: 100%;
@@ -121,7 +80,7 @@ body {
     opacity: 0.5;
 }
 
-.gantt-navline-text {
+.yti-gantt-navline-text {
     pointer-events: none;
     font-size: 13px;
     margin-left: -32px;
@@ -132,7 +91,7 @@ body {
     transform: rotate(0deg);
 }
 
-.gantt-navline-wrapper {
+.yti-gantt-navline-wrapper {
     pointer-events: none;
     position: absolute;
     top: 0px;

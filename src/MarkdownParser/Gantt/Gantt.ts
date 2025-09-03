@@ -104,13 +104,13 @@ export class Gantt {
 
 
     public getElement(): HTMLDivElement {
-        const wrapper = createDiv({ attr: { class: "gantt-wrapper" } })
+        const wrapper = createDiv({ attr: { class: "yti-gantt-wrapper" } })
 
         //Margin divs for date lines
         //-------------------------------------------------------
-        const marginDivUp = createDiv({ attr: { class: "gant-margin-up" } })
+        const marginDivUp = createDiv({ attr: { class: "yti-gant-margin-up" } })
 
-        const marginDivDown = createDiv({ attr: { class: "gant-margin-bottom" } })
+        const marginDivDown = createDiv({ attr: { class: "yti-gant-margin-bottom" } })
         //-------------------------------------------------------
 
         //Date navigation lines
@@ -126,7 +126,7 @@ export class Gantt {
         wrapper.appendChild(marginDivUp)
         this.tasks.forEach(task => {
             try {
-                const task_line = createDiv({ attr: { class: "gantt-task-line" } })
+                const task_line = createDiv({ attr: { class: "yti-gantt-task-line" } })
                 task_line.appendChild(task.getElement(this.startDate, this.endDate))
                 wrapper.appendChild(task_line)
             } catch (err) {

@@ -39,8 +39,8 @@ export class GanttTask {
         const relativeStart: number = (this.startDate.getTime() - absoluteStart.getTime()) * timeCoeff
         const relativeWidth: number = (this.endDate.getTime() - this.startDate.getTime()) * timeCoeff
 
-        const wrapper = createDiv({ attr: { class: `gantt-task-wrapper` } })
-        const issueLink = createDiv({ attr: { class: `gantt-task-issue-link-div` } })
+        const wrapper = createDiv({ attr: { class: `yti-gantt-task-wrapper` } })
+        const issueLink = createDiv({ attr: { class: `yti-gantt-task-issue-link-div` } })
         const issueAnchor = createEl('a', {
             href: `https://tracker.yandex.ru/${this.taskId}`,
             text: this.taskId
@@ -48,11 +48,11 @@ export class GanttTask {
 
         issueLink.appendChild(issueAnchor)
 
-        const ganttWrapper = createDiv({ attr: { class: `gantt-task-other-wrapper` } })
+        const ganttWrapper = createDiv({ attr: { class: `yti-gantt-task-other-wrapper` } })
 
         const ganttElement = createDiv({
             attr: {
-                class: "gantt-task-element",
+                class: "yti-gantt-task-element",
                 style: `
                     margin-left: ${relativeStart}%; 
                     width: ${relativeWidth}%; 
@@ -63,7 +63,7 @@ export class GanttTask {
 
 
         const textWrapper = createEl('div', {
-            attr: { class: "gantt-task-text-wrapper" },
+            attr: { class: "yti-gantt-task-text-wrapper" },
             text: this.name
         })
 
