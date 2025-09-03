@@ -1,6 +1,7 @@
 export const defaultSettings = {
     "orgId": "",
-    "oauth": "", "issueAttrs": [
+    "oauth": "", 
+    "issueAttrs": [
         {
             "firstLayer": "assignee",
             "secondLayer": "login",

@@ -116,7 +116,7 @@ export class YTISettings {
                 this.firstLaunchNotice()
             }
 
-            await this.plugin.saveData(defaultSettings)
+            await this.plugin.saveData(structuredClone(defaultSettings))
             data = await this.plugin.loadData()
         }
 
