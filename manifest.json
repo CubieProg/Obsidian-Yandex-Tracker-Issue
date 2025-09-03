@@ -1,7 +1,7 @@
 {
 	"id": "yandex-tracker-issue",
 	"name": "Yandex Tracker Issue",
-	"version": "1.0.2.1",
+	"version": "1.0.2.2",
 	"minAppVersion": "1.0.0",
 	"description": "Display Yandex Tracker issues in your notes",
 	"author": "Pavel Sokolov",

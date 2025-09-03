@@ -29,7 +29,6 @@ export class YTIMarkdownRenderer extends MarkdownRenderChild {
         this.context = ctx;
 
         this.renderCallback = renderCallback;
-
         this.display();
     }
 
