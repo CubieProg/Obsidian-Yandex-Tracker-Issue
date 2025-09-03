@@ -81,16 +81,16 @@ export class YTISettingsTab extends PluginSettingTab {
 
         this.addHiddenText(
             containerEl,
-            "OAuth Token",
-            'Укажите ваш OAuth Token',
+            "Oauth token",
+            'Укажите ваш oauth token',
             'oauth',
             this.showOAuth
         )
 
         this.addHiddenText(
             containerEl,
-            "Org ID",
-            'Укажите Org ID вашей организации',
+            "Org id",
+            'Укажите org id вашей организации',
             'orgId',
             this.showOrgId
         )
@@ -98,14 +98,14 @@ export class YTISettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Проверка подключения')
-            .setDesc('Проверка подключения к Yandex Tracker')
+            .setDesc('Проверка подключения к yandex tracker')
             .addButton((component: ButtonComponent) =>
                 component
                     .setButtonText("Проверить")
                     .onClick(async (evt: MouseEvent) => {
 
                         if (!this.tester) {
-                            new Notice("Не могу протестировать подключение.\n\nОткройте, пожалуйста, ISSUE на гитхабе в репозитории данного плагина по данной проблеме.")
+                            new Notice("Не могу протестировать подключение.\n\nОткройте, пожалуйста, issue на гитхабе в репозитории данного плагина по данной проблеме.")
                         }
 
                         this.tester.testConnection()
@@ -114,7 +114,7 @@ export class YTISettingsTab extends PluginSettingTab {
 
             
         new Setting(containerEl).setName('Настройки отображения.').setHeading();
-        
+
         // const display_settings_header = createEl('h1', { text: "Настройки отображения." })
         // containerEl.appendChild(display_settings_header)
 
