@@ -52,6 +52,9 @@ body {
     text-overflow: ellipsis;
 
     background: rgb(75, 113, 214);
+
+    margin-left: var(--yti-gantt-task-offset, 0);  
+    width: var(--yti-gantt-task-width, 0);
 }
 
 .yti-gantt-task-text-wrapper {
@@ -68,6 +71,7 @@ body {
 .yti-gantt-navline-datenav {
     pointer-events: none;
     height: 100%;
+    margin-left: var(--yti-gantt-navline-offset, 0); 
 }
 
 .yti-gantt-navline-line {

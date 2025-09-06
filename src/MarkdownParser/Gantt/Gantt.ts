@@ -116,8 +116,8 @@ export class Gantt {
         //Date navigation lines
         //-------------------------------------------------------
         for (let item of this.generateMonthes(this.startDate, this.endDate, true)) {
-            // const dateNav = navDateLine(item, this.getRelativeDate(item));
-            // wrapper.appendChild(dateNav)
+            const dateNav = navDateLine(item, this.getRelativeDate(item));
+            wrapper.appendChild(dateNav)
         }
         //-------------------------------------------------------
 

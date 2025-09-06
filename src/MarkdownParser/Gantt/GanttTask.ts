@@ -52,14 +52,12 @@ export class GanttTask {
 
         const ganttElement = createDiv({
             attr: {
-                class: "yti-gantt-task-element",
-                style: `
-                    margin-left: ${relativeStart}%; 
-                    width: ${relativeWidth}%; 
-                `,
+                class: "yti-gantt-task-element"
             }
         })
 
+        ganttElement.style.setProperty("--yti-gantt-task-offset", `${relativeStart}%`);
+        ganttElement.style.setProperty("--yti-gantt-task-width", `${relativeWidth}%`);
 
 
         const textWrapper = createEl('div', {
